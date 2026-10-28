@@ -6,7 +6,7 @@
     "tracked_changed_projects":  188,
     "untracked_files_included":  19,
     "source_type":  "pinned upstream manifest plus source deltas",
-    "status":  "curated delta candidate; publication review pending",
+    "status":  "published source delta; incomplete checkout, reproducibility review pending",
     "vendor_projects_excluded":  2,
     "private_keys_logs_and_rom_binaries_included":  false,
     "kernel_source":  "AlexFurina/Eureka-R25U-Jackpotlte",
