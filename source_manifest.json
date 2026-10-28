@@ -1,0 +1,14 @@
+﻿{
+    "device":  "Samsung Galaxy A8 2018 SM-A530F (jackpotlte)",
+    "android":  "15",
+    "lineageos":  "22.2",
+    "source_projects_included":  13,
+    "tracked_changed_projects":  188,
+    "untracked_files_included":  19,
+    "source_type":  "pinned upstream manifest plus source deltas",
+    "status":  "curated delta candidate; publication review pending",
+    "vendor_projects_excluded":  2,
+    "private_keys_logs_and_rom_binaries_included":  false,
+    "kernel_source":  "AlexFurina/Eureka-R25U-Jackpotlte",
+    "kernel_commit":  "47c82a9d84ad6e3b9a857d3dba1f7115090dc788"
+}

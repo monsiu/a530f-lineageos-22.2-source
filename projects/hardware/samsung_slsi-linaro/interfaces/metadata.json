@@ -1,0 +1,27 @@
+﻿{
+    "path":  "hardware/samsung_slsi-linaro/interfaces",
+    "head":  "cc28fd74e142a2aa12affbcecef5fff11e63c733",
+    "tracked_changes":  2,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  "D ",
+                        "path":  "SbwcDecompService/1.0/default/Android.bp"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "SbwcDecompService/1.0/default/Android.bp.disabled"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  241,
+    "remotes":  [
+                    "github\thttps://github.com/LineageOS/android_hardware_samsung_slsi-linaro_interfaces (fetch)",
+                    "github\thttps://github.com/LineageOS/android_hardware_samsung_slsi-linaro_interfaces (push)"
+                ]
+}

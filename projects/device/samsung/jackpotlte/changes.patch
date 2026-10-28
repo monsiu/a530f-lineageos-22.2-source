@@ -1,0 +1,79 @@
+diff --git a/BoardConfig.mk b/BoardConfig.mk
+index 167aaca29c18d14ccedf6b40f095a26772a3abe1..1ef6374435a3cc8c2dc3690f2ee3906496ced241 100644
+--- a/BoardConfig.mk
++++ b/BoardConfig.mk
+@@ -17,7 +17,7 @@ BOARD_HWJPEG_ANDROID_VERSION := 9
+ TARGET_SEC_FP_HAS_FINGERPRINT_GESTURES := true
+ 
+ # Kernel
+-TARGET_KERNEL_CONFIG := lineage_jackpotlte_defconfig
++TARGET_KERNEL_CONFIG := exynos7885-jackpotlte_defconfig
+ 
+ # Partitions
+ BOARD_SUPER_PARTITION_METADATA_DEVICE := SYSTEM
+@@ -30,3 +30,6 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 39845888
+ 
+ # Vintf
+ DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
++
++# Smaller ramdisks: Android 15 recovery does not fit the 38 MB partition with gzip (kernel has CONFIG_RD_XZ)
++BOARD_RAMDISK_USE_XZ := true
+diff --git a/device.mk b/device.mk
+index 2aee4ced91f5da6321c54a23f765cea52f2e98cd..aeb4cfa8abf435be66242086a521b0ea900ea06d 100644
+--- a/device.mk
++++ b/device.mk
+@@ -24,7 +24,6 @@ $(call inherit-product, vendor/samsung/jackpotlte/jackpotlte-vendor.mk)
+ 
+ # Audio
+ PRODUCT_PACKAGES += \
+-    libstdc++.vendor
+ 
+ # Camera
+ PRODUCT_PACKAGES += \
+diff --git a/manifest.xml b/manifest.xml
+index 895ee44dfe42e660842e084dee7a3693b245c61e..c788fd90918432c9949d2e4ebf8cd3e35ef4e035 100644
+--- a/manifest.xml
++++ b/manifest.xml
+@@ -1,4 +1,4 @@
+-<manifest version="2.0" type="device" target-level="3">
++<manifest version="2.0" type="device" target-level="5">
+     <hal format="hidl">
+         <name>android.hardware.biometrics.fingerprint</name>
+         <transport>hwbinder</transport>
+diff --git a/overlay/frameworks/base/core/res/res/values/config.xml b/overlay/frameworks/base/core/res/res/values/config.xml
+index 8df49e7f20c41a4785a8828bbb16c503b2bf1880..01c9a52dc2cf2a415e914101eeea31782c950632 100644
+--- a/overlay/frameworks/base/core/res/res/values/config.xml
++++ b/overlay/frameworks/base/core/res/res/values/config.xml
+@@ -31,7 +31,7 @@
+     <!-- Control whether the always on display mode is available. This should only be enabled on
+          devices where the display has been tuned to be power efficient in DOZE and/or DOZE_SUSPEND
+          states. -->
+-    <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
++    <bool name="config_dozeAlwaysOnDisplayAvailable">false</bool>
+ 
+     <!-- Disable AOD by default -->
+     <bool name="config_dozeAlwaysOnEnabled">false</bool>
+diff --git a/proprietary-files.txt b/proprietary-files.txt
+index ebb9372b14bb546d904c321f79c79f4cb15c2817..0712f7e3199792a2dbd45ce9996af374295f3e08 100644
+--- a/proprietary-files.txt
++++ b/proprietary-files.txt
+@@ -17,11 +17,9 @@ vendor/lib/lib_SoundAlive_SRC384_ver320.so|3ab06abd04a8ab289b5065d4d9d3bbff53be2
+ vendor/lib/lib_soundaliveresampler.so|da77859f01e89f9e5dfef3812a9acff0faa8edca
+ vendor/lib/libaudio-ril.so|83ca6d5b55c9f95b12b0b61fb7ff1bba76367ca7|43eebb634edba11cdfa692e480a43e41395e6951
+ vendor/lib/libaudio_soundtrigger.so|9df1c3362455b1637998779107471722c07067f2
+-vendor/lib/libaudioroute.so|245f6232d084604dd56be043facd4dd29cf53c40
+ vendor/lib/librecordalive.so|bdc43dfa9f5cca1ce5627152bd6368b02cdb7d8d
+ vendor/lib/libsamsungDiamondVoice.so|e5e6969ea3eade1e2e6581dd285ad03d6d890aed
+ vendor/lib/libsecaudioinfo.so|77b8a665324a58a2cfe79159e32958f9e9b2307e
+-vendor/lib/libtinyalsa.so|9ffd4abac44b8a5c6ea5308670ba93124914594b
+ 
+ # Camera - SC02LOMS1CVK2
+ vendor/lib/hw/camera.exynos7885.so|43e0263dd64e7601599f01d396eef833d6e52200|1e4e8c59dbcfad5fa63a931bb84b29ac2c778e62
+@@ -32,7 +30,6 @@ vendor/lib/libhifills.so|56c31d07fc1a939becb69d520f7fbe16bb6cb48c
+ vendor/lib/libhifills_interface.so|18076fb7674ec8149551b514a076e654e5365576
+ vendor/lib/libremosaic_daemon.so|b29d3624a699c70d012ba1ba59fcafa411a8ffce
+ vendor/lib/libremosaic_tuning.so|9c39e7c41659bb5407ca8e4690348bb6ae9b3db5
+-vendor/lib/libremosaiclib_s5k3p8sp_gpu.so|66c33277bf24d42aca940a2aa907f4650a30fa45
+ vendor/lib/libsaiv_BeautySolutionVideo.so|6d58aed4b1a626995f5eb885574914f9b373d2c2
+ vendor/lib/libswldc_capture_core.camera.samsung.so|e10b70f765bd5bcc61dd67e46db94f4a9b00a7b4
+ vendor/lib/libuniapi.so|00e97a18f49aadcbab12df0ec19ea8830eb8c354

@@ -1,0 +1,40 @@
+﻿{
+    "path":  "bootable/recovery",
+    "head":  "b7461833c7a75c00417208d61ee4c173c645dc1a",
+    "tracked_changes":  1,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "etc/init.rc"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+                               {
+                                   "path":  "etc/init.rc.before-confone-test",
+                                   "sha256":  "766a2e9270fb5030d1468e2af901f47bd51cf165d5db7922dbe54ddcc4d054a8",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "etc/init.rc.before-softconnect-fix",
+                                   "sha256":  "653196c60e47ed4ea080bdae0acbe9a615690d9e2ead2cc219a36263e2f1d0d5",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "etc/init.rc.before-take6-inline-test",
+                                   "sha256":  "653196c60e47ed4ea080bdae0acbe9a615690d9e2ead2cc219a36263e2f1d0d5",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               }
+                           ],
+    "patch_bytes":  2002,
+    "remotes":  [
+                    "github\thttps://github.com/LineageOS/android_bootable_recovery (fetch)",
+                    "github\thttps://github.com/LineageOS/android_bootable_recovery (push)"
+                ]
+}

@@ -1,0 +1,42 @@
+﻿{
+    "path":  "frameworks/base",
+    "head":  "3f0e0b8bb0a75613fe74599f3d52c152d81a37c1",
+    "tracked_changes":  3,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "packages/SystemUI/src/com/android/systemui/bouncer/ui/viewmodel/PinBouncerViewModel.kt"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+                               {
+                                   "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java.before-race-fix",
+                                   "sha256":  "ce12a0a56f970a64a4c0572a1b60ce1e3184314bd10efd43e124c8061ab9c490",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java.before-race-fix",
+                                   "sha256":  "1901f0254b3fb8d568c00eb03e3c00a85430dd1b59fc59220a92528e707ac9f8",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               }
+                           ],
+    "patch_bytes":  9420,
+    "remotes":  [
+                    "github\thttps://github.com/LineageOS/android_frameworks_base (fetch)",
+                    "github\thttps://github.com/LineageOS/android_frameworks_base (push)"
+                ]
+}

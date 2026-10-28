@@ -1,0 +1,75 @@
+﻿{
+    "projects":  [
+                     {
+                         "path":  "bootable/recovery",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "device/samsung/exynos7885-common",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  4
+                     },
+                     {
+                         "path":  "device/samsung/jackpotlte",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "device/samsung_slsi/sepolicy",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "frameworks/base",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "frameworks/opt/telephony",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "hardware/samsung",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "hardware/samsung_slsi-linaro/codec2",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "hardware/samsung_slsi-linaro/exynos",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "hardware/samsung_slsi-linaro/graphics",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "hardware/samsung_slsi-linaro/interfaces",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     },
+                     {
+                         "path":  "kernel/samsung/exynos7885",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  15
+                     },
+                     {
+                         "path":  "system/sepolicy",
+                         "patch_applies_to_base":  true,
+                         "untracked_verified":  0
+                     }
+                 ],
+    "source_backup_checks_passed":  true,
+    "excluded_vendor_projects":  [
+                                     "vendor/samsung/exynos7885-common",
+                                     "vendor/samsung/jackpotlte"
+                                 ],
+    "excluded_reason":  "Original backup contains proprietary shared libraries and changes beneath proprietary/vendor; not copied."
+}

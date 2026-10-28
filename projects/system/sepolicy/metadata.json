@@ -1,0 +1,23 @@
+﻿{
+    "path":  "system/sepolicy",
+    "head":  "24428bf868b3ee9e4e304615a5564e88ea8f41e5",
+    "tracked_changes":  1,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "private/recovery.te"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  669,
+    "remotes":  [
+                    "github\thttps://github.com/LineageOS/android_system_sepolicy (fetch)",
+                    "github\thttps://github.com/LineageOS/android_system_sepolicy (push)"
+                ]
+}

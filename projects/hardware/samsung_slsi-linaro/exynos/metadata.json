@@ -1,0 +1,23 @@
+﻿{
+    "path":  "hardware/samsung_slsi-linaro/exynos",
+    "head":  "f05f00d0280b5e84678a444a195ff6ccdb95d813",
+    "tracked_changes":  1,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "gralloc3/src/mali_gralloc_debug.cpp"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  979,
+    "remotes":  [
+                    "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_exynos (fetch)",
+                    "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_exynos (push)"
+                ]
+}

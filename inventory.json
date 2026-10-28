@@ -1,0 +1,1341 @@
+﻿[
+    {
+        "path":  "bootable/recovery",
+        "head":  "b7461833c7a75c00417208d61ee4c173c645dc1a",
+        "tracked_changes":  1,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "etc/init.rc"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+                                   {
+                                       "path":  "etc/init.rc.before-confone-test",
+                                       "sha256":  "766a2e9270fb5030d1468e2af901f47bd51cf165d5db7922dbe54ddcc4d054a8",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "etc/init.rc.before-softconnect-fix",
+                                       "sha256":  "653196c60e47ed4ea080bdae0acbe9a615690d9e2ead2cc219a36263e2f1d0d5",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "etc/init.rc.before-take6-inline-test",
+                                       "sha256":  "653196c60e47ed4ea080bdae0acbe9a615690d9e2ead2cc219a36263e2f1d0d5",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   }
+                               ],
+        "patch_bytes":  2002,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_bootable_recovery (fetch)",
+                        "github\thttps://github.com/LineageOS/android_bootable_recovery (push)"
+                    ]
+    },
+    {
+        "path":  "device/samsung/exynos7885-common",
+        "head":  "1b0e8ced1860abed0810d853a60215f111048d05",
+        "tracked_changes":  33,
+        "untracked_files":  4,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "BoardConfigCommon.mk"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "configs/init/init.recovery.exynos7884.rc"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "configs/init/init.samsung.rc"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "configs/power/powerhint_exynos7885.json"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "exynos7885.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "framework_compatibility_matrix.xml"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "init/Android.bp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "manifest.xml"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "overlay/frameworks/base/core/res/res/values/config.xml"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "product.prop"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "proprietary-files.txt"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "recovery/Android.bp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/device.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/file.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/file_contexts"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/genfs_contexts"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/gpsd.te"
+                        },
+                        {
+                            "status":  "D ",
+                            "path":  "sepolicy/vendor/hal_drm_clearkey.te"
+                        },
+                        {
+                            "status":  "D ",
+                            "path":  "sepolicy/vendor/hal_drm_widevine.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/hal_gatekeeper_default.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/hal_gnss_default.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/hal_keymaster_default.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/hal_power_default.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/hwservice_contexts"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/init.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/property.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/property_contexts"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/secril_config_svc.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sepolicy/vendor/tee.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "shims/libcamera_metadata_helper/Android.bp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "shims/libcamera_metadata_helper/CameraMetadata.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "shims/libcamera_metadata_helper/CameraParameters.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "vendor.prop"
+                        }
+                    ],
+        "untracked":  [
+                          {
+                              "path":  "sensors/Android.bp",
+                              "sha256":  "075fca52ee69382d8958957063e074a729a79f510554bb92780db2bc149bed36",
+                              "mode":  511
+                          },
+                          {
+                              "path":  "sensors/SensorsSubHal.cpp",
+                              "sha256":  "5892a336c52062d23ed85ca557aa747ca144f9d13b6ff56ac0132c4bbaa8308e",
+                              "mode":  511
+                          },
+                          {
+                              "path":  "sensors/hals.conf",
+                              "sha256":  "91ab22e393306bdc012f123a7fe9f24a0919120136b8ba6b6aff7360909ccd2e",
+                              "mode":  511
+                          },
+                          {
+                              "path":  "shims/libcamera_metadata_helper/CameraFdsan.cpp",
+                              "sha256":  "1a756c2aba7ad551edff2b206b90dbdd234ace8ea3de652efd1d80ba0495e49a",
+                              "mode":  420
+                          }
+                      ],
+        "excluded_untracked":  [
+                                   {
+                                       "path":  "configs/init/init.recovery.exynos7884.rc.bisect2-backup",
+                                       "sha256":  "c683976696f6b8f9a2e7fe697f9aa471e3824101d456a8247629c919a3ee8639",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "configs/init/init.recovery.exynos7884.rc.confone-tested-backup",
+                                       "sha256":  "c683976696f6b8f9a2e7fe697f9aa471e3824101d456a8247629c919a3ee8639",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "configs/init/init.recovery.exynos7884.rc.take2-failed-backup",
+                                       "sha256":  "e4687d9af0cd478d26f4c806d2ed9003ac0d69a126e2d0565af0c7c6507c0fe1",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "configs/init/init.recovery.exynos7884.rc.take3-hung-backup",
+                                       "sha256":  "8449bac2c5cf3eb733a9fc2a1c2d5438735b00f6fe2553ffc486fa60a20d2f20",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "configs/init/init.recovery.exynos7884.rc.take5-pending-backup",
+                                       "sha256":  "2222a171acdf9bec1a0f8cabb416d01ff3e003156c74c1a7b9dbb7a867360f2e",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "configs/init/init.recovery.exynos7884.rc.tmp",
+                                       "sha256":  "290db65b946794f1fb48aef293d033b5a2e7ceff9ea90c7d270b792ea60928cf",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   }
+                               ],
+        "patch_bytes":  43831,
+        "remotes":  [
+                        "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_exynos7885-common (fetch)",
+                        "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_exynos7885-common (push)"
+                    ]
+    },
+    {
+        "path":  "device/samsung/jackpotlte",
+        "head":  "d6885b50653457eb9ca279bd824657ba4d2ba658",
+        "tracked_changes":  5,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "BoardConfig.mk"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "device.mk"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "manifest.xml"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "overlay/frameworks/base/core/res/res/values/config.xml"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "proprietary-files.txt"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  4054,
+        "remotes":  [
+                        "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_jackpotlte (fetch)",
+                        "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_jackpotlte (push)"
+                    ]
+    },
+    {
+        "path":  "device/samsung_slsi/sepolicy",
+        "head":  "3083bb75a50325dd77f07f46a59efd87b839f487",
+        "tracked_changes":  2,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "common/vendor/gpsd.te"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "common/vendor/hal_drm_widevine.te"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  1374,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_device_samsung_slsi_sepolicy (fetch)",
+                        "github\thttps://github.com/LineageOS/android_device_samsung_slsi_sepolicy (push)"
+                    ]
+    },
+    {
+        "path":  "frameworks/base",
+        "head":  "3f0e0b8bb0a75613fe74599f3d52c152d81a37c1",
+        "tracked_changes":  3,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "packages/SystemUI/src/com/android/systemui/bouncer/ui/viewmodel/PinBouncerViewModel.kt"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+                                   {
+                                       "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java.before-race-fix",
+                                       "sha256":  "ce12a0a56f970a64a4c0572a1b60ce1e3184314bd10efd43e124c8061ab9c490",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java.before-race-fix",
+                                       "sha256":  "1901f0254b3fb8d568c00eb03e3c00a85430dd1b59fc59220a92528e707ac9f8",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   }
+                               ],
+        "patch_bytes":  9420,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_frameworks_base (fetch)",
+                        "github\thttps://github.com/LineageOS/android_frameworks_base (push)"
+                    ]
+    },
+    {
+        "path":  "frameworks/opt/telephony",
+        "head":  "eff3e8c7414bbec4cbedf14a6cd7009e0710d1e7",
+        "tracked_changes":  3,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "src/java/com/android/internal/telephony/cat/CatService.java"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "src/java/com/android/internal/telephony/cat/SendSMSParams.java"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  4492,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_frameworks_opt_telephony (fetch)",
+                        "github\thttps://github.com/LineageOS/android_frameworks_opt_telephony (push)"
+                    ]
+    },
+    {
+        "path":  "hardware/samsung",
+        "head":  "082709ec235fd60f55bff0fb0deb8eae12bf0622",
+        "tracked_changes":  19,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  "D ",
+                            "path":  "aidl/power-libperfmgr/Android.bp"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "aidl/power-libperfmgr/Android.bp.disabled"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "hidl/fingerprint/inscreen/Android.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "hidl/fingerprint/inscreen/Android.mk.disabled"
+                        },
+                        {
+                            "status":  "D ",
+                            "path":  "hidl/power-libperfmgr/Android.bp"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "hidl/power-libperfmgr/Android.bp.disabled"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "hidl/power/Android.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "hidl/power/Android.mk.disabled"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "hidl/powershare/Android.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "hidl/powershare/Android.mk.disabled"
+                        },
+                        {
+                            "status":  "D ",
+                            "path":  "hidl/thermal/Android.bp"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "hidl/thermal/Android.bp.disabled"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "macloader/Android.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "macloader/Android.mk.disabled"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "mkbootimg.mk"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "ril/libril/Android.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "ril/libril/Android.mk.disabled"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "ril/libsecril-client/Android.mk"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "ril/libsecril-client/Android.mk.disabled"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  18976,
+        "remotes":  [
+                        "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung (fetch)",
+                        "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung (push)"
+                    ]
+    },
+    {
+        "path":  "hardware/samsung_slsi-linaro/codec2",
+        "head":  "5a0d8a9b2f91390eef398b0335a7ee0b4b7e44fd",
+        "tracked_changes":  30,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " D",
+                            "path":  "Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/av1/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/h263/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/h264/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/hevc/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/mpeg2/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/mpeg4/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/vc1/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/vp8/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "c2component/vp9/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "csc/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/av1/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/h263/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/h264/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/hevc/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/mpeg2/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/mpeg4/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/vc1/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/vp8/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/codec/vp9/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/csc/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "filter/postprocess/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "osal/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "plugin/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "services/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "videocodec/Android.bp"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "videocodec/libExynosVideoApi/Android.bp"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+                                   {
+                                       "path":  "Android.bp.disabled",
+                                       "sha256":  "833e0e2e910a10ef2668d50ff3041b0a85c474703e51d29e8669d65f6ed7ffd2",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/Android.bp.disabled",
+                                       "sha256":  "5fa923eabf2b0f022e1656b87d91db0bc0be65ecbf6c8651aeb1497166e0d7ee",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/av1/Android.bp.disabled",
+                                       "sha256":  "9902895c4cf1ab548ef4a555a6950f77641736774e03fdbfdaeba2edc149e9b3",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/h263/Android.bp.disabled",
+                                       "sha256":  "dfe1b6465da9b414e0a3ac375a1bac1a81769dd857eacb6b782993b7c2b0b2aa",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/h264/Android.bp.disabled",
+                                       "sha256":  "fc15095d69752cc10589ccf97d473ee76a09a6553904ce4067794a4e2a445b93",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/hevc/Android.bp.disabled",
+                                       "sha256":  "eed5f261d53313865ae81fedcb9a61ab46f3e86a87eb7ff2d64e5efd4e16682e",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/mpeg2/Android.bp.disabled",
+                                       "sha256":  "76985ec92484332a3669f22584010452a31f676c76f3fd10b5179832856b59e2",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/mpeg4/Android.bp.disabled",
+                                       "sha256":  "289c8c9d1bd3e3e7bef2b8a42a86d1fd5c98f83cd35ec8e87e7e50c2cf21668f",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/vc1/Android.bp.disabled",
+                                       "sha256":  "14c22913a9540e34cd3a01198e0d157d608f2b795a5706bc8806f3935ba84400",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/vp8/Android.bp.disabled",
+                                       "sha256":  "914933a86199f3f21d919a3f355b8e8a617671ca09bec581ec77325d29fcdcce",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "c2component/vp9/Android.bp.disabled",
+                                       "sha256":  "05e28020fcdbbe94431278cb74fb8b4447465161c5f6ce116507015deecc3655",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "csc/Android.bp.disabled",
+                                       "sha256":  "0a053bcaef76453c9334eb1a48a380a2daceb6b21d06517f33299bf20aef4c03",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/Android.bp.disabled",
+                                       "sha256":  "d9b8bf8b12c3779fc740f3f0d5b89bf34b6768ed65e6af5c28ecbc602717663b",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/Android.bp.disabled",
+                                       "sha256":  "9d90140a181c2d71ecfb2c701e430bfef0efc613790c6af92c1e4d8626d4ec5d",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/av1/Android.bp.disabled",
+                                       "sha256":  "c5fd49928c1e49aff6f51c3a9c34ba4dcb470f533eb3a8675397e10e0a86c2e5",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/h263/Android.bp.disabled",
+                                       "sha256":  "6c360737e30c591105fa91d0b2783b005fc08a3e9360deb9eedcff975f93a41c",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/h264/Android.bp.disabled",
+                                       "sha256":  "02dde7d558c5a918a084a07a9eb4984aa5c92859604919cba10f3903c2d5b1fc",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/hevc/Android.bp.disabled",
+                                       "sha256":  "08fc935e3a5d7523aeed43cd485145ad71a677ceb295df97e46040aee2f8d68d",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/mpeg2/Android.bp.disabled",
+                                       "sha256":  "39459effab734f5e41d9c9da7b7da730f48ae9d993c3b187d7386d2c8b95c6cd",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/mpeg4/Android.bp.disabled",
+                                       "sha256":  "8daf8e5c42f78d245ad79ad01e6d64dd4121727620cf10c266e05aec29427200",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/vc1/Android.bp.disabled",
+                                       "sha256":  "80b38c2470c7104d7b99a0db41d671c2c099d373f0763dfa405656cc6057aa05",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/vp8/Android.bp.disabled",
+                                       "sha256":  "c9b48188ae0ece58cfbbc05a0958a1c89ecb3375ad48d553f6db2de3bb53236f",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/codec/vp9/Android.bp.disabled",
+                                       "sha256":  "a1a23141ff856985c4ef97cdfe1af7fff43aa64bdb563348f4c559f7a43b5ba8",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/csc/Android.bp.disabled",
+                                       "sha256":  "fc9466357cb39beaaff017e69444240202236c9d9725adbe1220976bb84fbf27",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "filter/postprocess/Android.bp.disabled",
+                                       "sha256":  "8f3ec848980336ba4c45dbe7717fbaf5cff50d28a4bfa6a4215dd0a8bf1cba02",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "osal/Android.bp.disabled",
+                                       "sha256":  "fc62e02c8c17fb962aea361837807b737df4158ff9ef1af3958231a221dbb945",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "plugin/Android.bp.disabled",
+                                       "sha256":  "0f9a1c81b83d6417cc53291e94e007bad1683917ab610922570910c097a6915c",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "services/Android.bp.disabled",
+                                       "sha256":  "d9ef78b9f7b0fc46babf0659cb9ec372887efccd41095e79cb0ba19c1b5b5f16",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "videocodec/Android.bp.disabled",
+                                       "sha256":  "91adc52ee89c5fd6ffc7fb5bf560eb48098220fa77d0da55a548a108bddfe161",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   },
+                                   {
+                                       "path":  "videocodec/libExynosVideoApi/Android.bp.disabled",
+                                       "sha256":  "2125e634980cb776a4ab3b78b96a38aa65861b400450d88d0a8de226e361adf2",
+                                       "mode":  420,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   }
+                               ],
+        "patch_bytes":  53558,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_hardware_samsung_slsi-linaro_codec2 (fetch)",
+                        "github\thttps://github.com/LineageOS/android_hardware_samsung_slsi-linaro_codec2 (push)"
+                    ]
+    },
+    {
+        "path":  "hardware/samsung_slsi-linaro/exynos",
+        "head":  "f05f00d0280b5e84678a444a195ff6ccdb95d813",
+        "tracked_changes":  1,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "gralloc3/src/mali_gralloc_debug.cpp"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  979,
+        "remotes":  [
+                        "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_exynos (fetch)",
+                        "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_exynos (push)"
+                    ]
+    },
+    {
+        "path":  "hardware/samsung_slsi-linaro/graphics",
+        "head":  "7c28107c046cd666b01adef06617482e26311ab7",
+        "tracked_changes":  29,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc1/ExynosHWC.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc1/ExynosHWCDebug.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc1/libvppdisplay/ExynosDisplay.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc1/libvppdisplay/ExynosDisplayResourceManager.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc1/libvppvirtualdisplay/ExynosVirtualDisplay.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/ExynosHWC.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/ExynosHWCDebug.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/ExynosHWCDebug.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libdevice/ExynosDevice.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libdevice/ExynosDisplay.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libdevice/ExynosLayer.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libdisplayinterface/ExynosDeviceFbInterface.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libdisplayinterface/ExynosDisplayFbInterface.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libhwchelper/ExynosHWCHelper.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libresource/ExynosMPP.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2.1/libresource/ExynosResourceManager.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/ExynosHWCDebug.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/ExynosHWCDebug.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/libdevice/ExynosDevice.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/libdevice/ExynosDisplay.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/libdevice/ExynosLayer.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/libhwchelper/ExynosHWCHelper.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/libresource/ExynosMPP.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libhwc2/libresource/ExynosResourceManager.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "base/libion/test/Android.bp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "exynos7580/libdisplaymodule/ExynosPrimaryDisplay.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "exynos7580/libvirtualdisplaymodule/ExynosVirtualDisplayModule.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "exynos7870/libdisplaymodule/ExynosPrimaryDisplay.cpp"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "exynos7870/libvirtualdisplaymodule/ExynosVirtualDisplayModule.cpp"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  135185,
+        "remotes":  [
+                        "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_graphics (fetch)",
+                        "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_graphics (push)"
+                    ]
+    },
+    {
+        "path":  "hardware/samsung_slsi-linaro/interfaces",
+        "head":  "cc28fd74e142a2aa12affbcecef5fff11e63c733",
+        "tracked_changes":  2,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  "D ",
+                            "path":  "SbwcDecompService/1.0/default/Android.bp"
+                        },
+                        {
+                            "status":  " A",
+                            "path":  "SbwcDecompService/1.0/default/Android.bp.disabled"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  241,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_hardware_samsung_slsi-linaro_interfaces (fetch)",
+                        "github\thttps://github.com/LineageOS/android_hardware_samsung_slsi-linaro_interfaces (push)"
+                    ]
+    },
+    {
+        "path":  "kernel/samsung/exynos7885",
+        "head":  "47c82a9d84ad6e3b9a857d3dba1f7115090dc788",
+        "tracked_changes":  59,
+        "untracked_files":  15,
+        "baseline_override":  "AlexFurina/Eureka-R25U-Jackpotlte",
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "arch/arm64/Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "arch/arm64/boot/dts/Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "arch/arm64/configs/exynos7885-jackpotlte_defconfig"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/Kconfig"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/android/binder_alloc.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/gpu/arm/b_r26p0/backend/gpu/mali_kbase_pm_driver.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/input/input.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/input/touchscreen/sec_ts/sec_ts.c"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "drivers/kernelsu"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "drivers/usb/gadget/configfs.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/Kconfig"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/exec.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/data.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/f2fs.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/file.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/inode.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/super.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/sysfs.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/f2fs/xattr.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/inode.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/open.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/read_write.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "fs/stat.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "include/linux/fs.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "include/uapi/linux/Kbuild"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "include/uapi/linux/fs.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/Makefile"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/Makefile.dtc"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/checks.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/data.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc-lexer.l"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc-lexer.lex.c_shipped"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc-parser.tab.c_shipped"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc-parser.tab.h_shipped"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc-parser.y"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/dtc.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/fdtdump.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/fdtget.c"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "scripts/dtc/fdtoverlay.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/fdtput.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/flattree.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/fstree.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/livetree.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/srcpos.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/srcpos.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/treesource.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/update-dtc-source.sh"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/util.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/util.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/version_gen.h"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "scripts/dtc/version_non_gen.h"
+                        },
+                        {
+                            "status":  " D",
+                            "path":  "scripts/dtc/yamltree.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "security/selinux/hooks.c"
+                        },
+                        {
+                            "status":  " M",
+                            "path":  "sound/soc/codecs/tfa9872/Makefile"
+                        }
+                    ],
+        "untracked":  [
+                          {
+                              "path":  "fs/f2fs/verity.c",
+                              "sha256":  "d10ebf31fbbda5e646f9f8730efbafa50653900210928455bd79b92f65d5aef9",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/Kconfig",
+                              "sha256":  "1a41df4a2ab80d7f71f1cdefb7b30bf87ba2852deca94813a76b59061e9a4209",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/Makefile",
+                              "sha256":  "6b5c27ff2d82ceb1ed685a6ad3ee9204584bcf8ecfce29d99270c22171ecc2cd",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/enable.c",
+                              "sha256":  "611cb9bf551e6f078ab4dd196dce602ad281ddf7e3570d459be769c5eeab6504",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/fsverity_private.h",
+                              "sha256":  "84693016420b4833b8808c7738e6b0b80a558a9d1e973bb8d2edda7304f50e63",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/hash_algs.c",
+                              "sha256":  "066caf17ca1e95835ca59884d47375917da77c57a81b64ea540bb597e8bd6748",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/init.c",
+                              "sha256":  "a568d42c6d984d79ef182f52d9c6c7a24369cef7722357f873092d6bd41f96ff",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/measure.c",
+                              "sha256":  "4026a926612b7e33262d8be063d925d5b07bc0f4c79091b19b7326a925db518b",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/open.c",
+                              "sha256":  "16d7035e2e88d9c6798cde56163a136e52a37fde49d0bc9f7648333db5f5df89",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/signature.c",
+                              "sha256":  "5e7dcd43ab3663f17b906a32debeaa5a9df5575498fcdab305ee846f2edd1b78",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "fs/verity/verify.c",
+                              "sha256":  "9c069fe08c65ec0df5d3997781da7e9ef6c80bebac8c676a3d95dcb1dca5872c",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "include/linux/fsverity.h",
+                              "sha256":  "94862c203db1edf944f2b75645893ff09154dec69b32e1b75e2e9fccea9b554e",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "include/uapi/linux/fsverity.h",
+                              "sha256":  "8be8e57a427570f53aae2ae28d3bf2d6e9c1de02a1beaef0c330cdc3544f2d4e",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "scripts/dtc/.gitignore",
+                              "sha256":  "50c08d7e62f1a65e3be6bb253eb53e88d2d2752cd5f51ba53211a424df32d2b3",
+                              "mode":  420
+                          },
+                          {
+                              "path":  "scripts/dtc/include-prefixes/sh",
+                              "symlink":  "../../../arch/sh/boot/dts"
+                          }
+                      ],
+        "excluded_untracked":  [
+                                   {
+                                       "path":  "drivers/usb/gadget/configfs.c.before-firstlink-fix",
+                                       "sha256":  "20e62a14b3503746a118b19395ab2e3c5f71f330a65059646084be9012dc7a38",
+                                       "mode":  493,
+                                       "reason":  "development scratch or disabled build file excluded from curated candidate"
+                                   }
+                               ],
+        "patch_bytes":  350176,
+        "remotes":  [
+                        "origin\thttps://github.com/AlexFurina/Eureka-R25U-Jackpotlte.git (fetch)",
+                        "origin\thttps://github.com/AlexFurina/Eureka-R25U-Jackpotlte.git (push)"
+                    ]
+    },
+    {
+        "path":  "system/sepolicy",
+        "head":  "24428bf868b3ee9e4e304615a5564e88ea8f41e5",
+        "tracked_changes":  1,
+        "untracked_files":  0,
+        "tracked":  [
+                        {
+                            "status":  " M",
+                            "path":  "private/recovery.te"
+                        }
+                    ],
+        "untracked":  [
+
+                      ],
+        "excluded_untracked":  [
+
+                               ],
+        "patch_bytes":  669,
+        "remotes":  [
+                        "github\thttps://github.com/LineageOS/android_system_sepolicy (fetch)",
+                        "github\thttps://github.com/LineageOS/android_system_sepolicy (push)"
+                    ]
+    }
+]

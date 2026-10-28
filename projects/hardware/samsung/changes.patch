@@ -1,0 +1,634 @@
+diff --git a/aidl/power-libperfmgr/Android.bp b/aidl/power-libperfmgr/Android.bp.disabled
+similarity index 90%
+rename from aidl/power-libperfmgr/Android.bp
+rename to aidl/power-libperfmgr/Android.bp.disabled
+index 6b894b2a7c3d76520c0ba2efa3e99ae7d0c767e6..e4c92486aef58c144a762194fa9f4933dd85a9e3 100644
+--- a/aidl/power-libperfmgr/Android.bp
++++ b/aidl/power-libperfmgr/Android.bp.disabled
+@@ -27,15 +27,15 @@ cc_binary {
+     vintf_fragments: ["android.hardware.power-service.samsung.xml"],
+     vendor: true,
+     shared_libs: [
+-        "android.hardware.power-ndk_platform",
++        "android.hardware.power-ndk",
+         "libbase",
+         "libcutils",
+         "liblog",
+         "libutils",
+         "libbinder_ndk",
+         "libperfmgr",
+-        "pixel-power-ext-ndk_platform",
+-        "vendor.lineage.power-ndk_platform",
++        "pixel-power-ext-ndk",
++        "vendor.lineage.power-ndk",
+     ],
+     srcs: [
+         "service.cpp",
+diff --git a/hidl/fingerprint/inscreen/Android.mk b/hidl/fingerprint/inscreen/Android.mk
+index c19fb1096e42b66f7aa40a1a79cf2221072cbaa1..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/hidl/fingerprint/inscreen/Android.mk
++++ b/hidl/fingerprint/inscreen/Android.mk
+@@ -1,44 +0,0 @@
+-#
+-# Copyright (C) 2020 The LineageOS Project
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-#      http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-
+-LOCAL_PATH := $(call my-dir)
+-
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES := \
+-    FingerprintInscreen.cpp \
+-    service.cpp
+-
+-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+-
+-LOCAL_SHARED_LIBRARIES := \
+-    libbase \
+-    libhardware \
+-    libhidlbase \
+-    liblog \
+-    libhwbinder \
+-    libutils \
+-    vendor.lineage.biometrics.fingerprint.inscreen@1.0
+-
+-LOCAL_MODULE := vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.samsung
+-LOCAL_INIT_RC := vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.samsung.rc
+-LOCAL_MODULE_RELATIVE_PATH := hw
+-LOCAL_MODULE_TAGS := optional
+-LOCAL_MODULE_OWNER := samsung
+-LOCAL_VINTF_FRAGMENTS := vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.samsung.xml
+-LOCAL_VENDOR_MODULE := true
+-
+-include $(BUILD_EXECUTABLE)
+diff --git a/hidl/fingerprint/inscreen/Android.mk.disabled b/hidl/fingerprint/inscreen/Android.mk.disabled
+new file mode 100644
+index 0000000000000000000000000000000000000000..c19fb1096e42b66f7aa40a1a79cf2221072cbaa1
+--- /dev/null
++++ b/hidl/fingerprint/inscreen/Android.mk.disabled
+@@ -0,0 +1,44 @@
++#
++# Copyright (C) 2020 The LineageOS Project
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++
++LOCAL_PATH := $(call my-dir)
++
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES := \
++    FingerprintInscreen.cpp \
++    service.cpp
++
++LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
++
++LOCAL_SHARED_LIBRARIES := \
++    libbase \
++    libhardware \
++    libhidlbase \
++    liblog \
++    libhwbinder \
++    libutils \
++    vendor.lineage.biometrics.fingerprint.inscreen@1.0
++
++LOCAL_MODULE := vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.samsung
++LOCAL_INIT_RC := vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.samsung.rc
++LOCAL_MODULE_RELATIVE_PATH := hw
++LOCAL_MODULE_TAGS := optional
++LOCAL_MODULE_OWNER := samsung
++LOCAL_VINTF_FRAGMENTS := vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.samsung.xml
++LOCAL_VENDOR_MODULE := true
++
++include $(BUILD_EXECUTABLE)
+diff --git a/hidl/power-libperfmgr/Android.bp b/hidl/power-libperfmgr/Android.bp.disabled
+similarity index 100%
+rename from hidl/power-libperfmgr/Android.bp
+rename to hidl/power-libperfmgr/Android.bp.disabled
+diff --git a/hidl/power/Android.mk b/hidl/power/Android.mk
+index 1af5c2bf3fee2b8419a2401ded16f693b5ee6f25..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/hidl/power/Android.mk
++++ b/hidl/power/Android.mk
+@@ -1,46 +0,0 @@
+-#
+-# Copyright (C) 2020 The LineageOS Project
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-#      http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-
+-LOCAL_PATH := $(call my-dir)
+-
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES := \
+-    Power.cpp \
+-    service.cpp
+-
+-LOCAL_C_INCLUDES := \
+-    $(LOCAL_PATH)/include \
+-    hardware/samsung/hidl/light/include
+-
+-LOCAL_SHARED_LIBRARIES := \
+-    libbase \
+-    libbinder \
+-    libhidlbase \
+-    libutils \
+-    android.hardware.power@1.0 \
+-    vendor.lineage.power@1.0
+-
+-LOCAL_STATIC_LIBRARIES := libc++fs
+-
+-LOCAL_MODULE := android.hardware.power@1.0-service.exynos
+-LOCAL_INIT_RC := android.hardware.power@1.0-service.exynos.rc
+-LOCAL_MODULE_RELATIVE_PATH := hw
+-LOCAL_MODULE_TAGS := optional
+-LOCAL_MODULE_OWNER := samsung
+-LOCAL_VENDOR_MODULE := true
+-
+-include $(BUILD_EXECUTABLE)
+diff --git a/hidl/power/Android.mk.disabled b/hidl/power/Android.mk.disabled
+new file mode 100644
+index 0000000000000000000000000000000000000000..1af5c2bf3fee2b8419a2401ded16f693b5ee6f25
+--- /dev/null
++++ b/hidl/power/Android.mk.disabled
+@@ -0,0 +1,46 @@
++#
++# Copyright (C) 2020 The LineageOS Project
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++
++LOCAL_PATH := $(call my-dir)
++
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES := \
++    Power.cpp \
++    service.cpp
++
++LOCAL_C_INCLUDES := \
++    $(LOCAL_PATH)/include \
++    hardware/samsung/hidl/light/include
++
++LOCAL_SHARED_LIBRARIES := \
++    libbase \
++    libbinder \
++    libhidlbase \
++    libutils \
++    android.hardware.power@1.0 \
++    vendor.lineage.power@1.0
++
++LOCAL_STATIC_LIBRARIES := libc++fs
++
++LOCAL_MODULE := android.hardware.power@1.0-service.exynos
++LOCAL_INIT_RC := android.hardware.power@1.0-service.exynos.rc
++LOCAL_MODULE_RELATIVE_PATH := hw
++LOCAL_MODULE_TAGS := optional
++LOCAL_MODULE_OWNER := samsung
++LOCAL_VENDOR_MODULE := true
++
++include $(BUILD_EXECUTABLE)
+diff --git a/hidl/powershare/Android.mk b/hidl/powershare/Android.mk
+index c222d8eaa774794586cf2f2bf4c07865eb3037cf..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/hidl/powershare/Android.mk
++++ b/hidl/powershare/Android.mk
+@@ -1,43 +0,0 @@
+-#
+-# Copyright (C) 2020 The LineageOS Project
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-#      http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-
+-LOCAL_PATH := $(call my-dir)
+-
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES := \
+-    PowerShare.cpp \
+-    service.cpp
+-
+-LOCAL_C_INCLUDES := \
+-    $(LOCAL_PATH)/include \
+-
+-LOCAL_SHARED_LIBRARIES := \
+-    libbase \
+-    libbinder \
+-    libhidlbase \
+-    libutils \
+-    vendor.lineage.powershare@1.0
+-
+-LOCAL_MODULE := vendor.lineage.powershare@1.0-service.samsung
+-LOCAL_INIT_RC := vendor.lineage.powershare@1.0-service.samsung.rc
+-LOCAL_MODULE_RELATIVE_PATH := hw
+-LOCAL_MODULE_TAGS := optional
+-LOCAL_MODULE_OWNER := samsung
+-LOCAL_VINTF_FRAGMENTS := vendor.lineage.powershare@1.0-service.samsung.xml
+-LOCAL_VENDOR_MODULE := true
+-
+-include $(BUILD_EXECUTABLE)
+diff --git a/hidl/powershare/Android.mk.disabled b/hidl/powershare/Android.mk.disabled
+new file mode 100644
+index 0000000000000000000000000000000000000000..c222d8eaa774794586cf2f2bf4c07865eb3037cf
+--- /dev/null
++++ b/hidl/powershare/Android.mk.disabled
+@@ -0,0 +1,43 @@
++#
++# Copyright (C) 2020 The LineageOS Project
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++
++LOCAL_PATH := $(call my-dir)
++
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES := \
++    PowerShare.cpp \
++    service.cpp
++
++LOCAL_C_INCLUDES := \
++    $(LOCAL_PATH)/include \
++
++LOCAL_SHARED_LIBRARIES := \
++    libbase \
++    libbinder \
++    libhidlbase \
++    libutils \
++    vendor.lineage.powershare@1.0
++
++LOCAL_MODULE := vendor.lineage.powershare@1.0-service.samsung
++LOCAL_INIT_RC := vendor.lineage.powershare@1.0-service.samsung.rc
++LOCAL_MODULE_RELATIVE_PATH := hw
++LOCAL_MODULE_TAGS := optional
++LOCAL_MODULE_OWNER := samsung
++LOCAL_VINTF_FRAGMENTS := vendor.lineage.powershare@1.0-service.samsung.xml
++LOCAL_VENDOR_MODULE := true
++
++include $(BUILD_EXECUTABLE)
+diff --git a/hidl/thermal/Android.bp b/hidl/thermal/Android.bp.disabled
+similarity index 100%
+rename from hidl/thermal/Android.bp
+rename to hidl/thermal/Android.bp.disabled
+diff --git a/macloader/Android.mk b/macloader/Android.mk
+index 5c68a96670d8850c1619c2040101b4e1af9fc5d6..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/macloader/Android.mk
++++ b/macloader/Android.mk
+@@ -1,20 +0,0 @@
+-ifeq ($(BOARD_HAVE_SAMSUNG_WIFI),true)
+-
+-LOCAL_PATH := $(call my-dir)
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES := \
+-    macloader.c
+-
+-LOCAL_SHARED_LIBRARIES := \
+-    liblog libutils
+-
+-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+-
+-LOCAL_MODULE := macloader
+-LOCAL_MODULE_TAGS := optional
+-LOCAL_VENDOR_MODULE := true
+-
+-include $(BUILD_EXECUTABLE)
+-
+-endif
+diff --git a/macloader/Android.mk.disabled b/macloader/Android.mk.disabled
+new file mode 100644
+index 0000000000000000000000000000000000000000..5c68a96670d8850c1619c2040101b4e1af9fc5d6
+--- /dev/null
++++ b/macloader/Android.mk.disabled
+@@ -0,0 +1,20 @@
++ifeq ($(BOARD_HAVE_SAMSUNG_WIFI),true)
++
++LOCAL_PATH := $(call my-dir)
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES := \
++    macloader.c
++
++LOCAL_SHARED_LIBRARIES := \
++    liblog libutils
++
++LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
++
++LOCAL_MODULE := macloader
++LOCAL_MODULE_TAGS := optional
++LOCAL_VENDOR_MODULE := true
++
++include $(BUILD_EXECUTABLE)
++
++endif
+diff --git a/mkbootimg.mk b/mkbootimg.mk
+index f71a71ad7d4e8289a8525b326155c5a95fc149f5..e46085bf60caefaa1fc8171af370bccabb31a5f4 100644
+--- a/mkbootimg.mk
++++ b/mkbootimg.mk
+@@ -67,9 +67,9 @@ BYPASS_TOOL := echo
+ TARGET_ABOOT_IMAGE :=
+ endif
+ 
+-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS)
++$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(INSTALLED_KERNEL_TARGET)
+ 	$(call pretty,"Target boot image: $@")
+-	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
++	$(hide) $(MKBOOTIMG) --kernel $(INSTALLED_KERNEL_TARGET) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
+ 	$(hide) echo -n "SEANDROIDENFORCE" >> $@
+ 	$(hide) $(BYPASS_TOOL) -p $(TARGET_ABOOT_IMAGE) $@ $@.oor
+ 	$(hide) cp $@.oor $@ || true
+diff --git a/ril/libril/Android.mk b/ril/libril/Android.mk
+index f45023bc07aecec5380f43a5e704fa7c1d2cbe8c..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/ril/libril/Android.mk
++++ b/ril/libril/Android.mk
+@@ -1,73 +0,0 @@
+-# Copyright 2006 The Android Open Source Project
+-
+-ifeq ($(BOARD_PROVIDES_LIBRIL),true)
+-
+-LOCAL_PATH:= $(call my-dir)
+-include $(CLEAR_VARS)
+-
+-LOCAL_VENDOR_MODULE := true
+-
+-LOCAL_SRC_FILES:= \
+-    ril.cpp \
+-    ril_event.cpp\
+-    RilSapSocket.cpp \
+-    ril_service.cpp \
+-    sap_service.cpp
+-
+-LOCAL_SHARED_LIBRARIES := \
+-    liblog \
+-    libutils \
+-    libcutils \
+-    libhardware_legacy \
+-    librilutils \
+-    android.hardware.radio@1.0 \
+-    android.hardware.radio.deprecated@1.0 \
+-    libhidlbase
+-
+-LOCAL_STATIC_LIBRARIES := \
+-    libprotobuf-c-nano-enable_malloc \
+-
+-LOCAL_CFLAGS += -Wno-unused-parameter
+-
+-ifeq ($(SIM_COUNT), 2)
+-    LOCAL_CFLAGS += -DANDROID_MULTI_SIM -DDSDA_RILD1
+-    LOCAL_CFLAGS += -DANDROID_SIM_COUNT_2
+-endif
+-
+-ifneq ($(filter xmm6262 xmm6360,$(BOARD_MODEM_TYPE)),)
+-LOCAL_CFLAGS += -DMODEM_TYPE_XMM6262
+-endif
+-ifeq ($(BOARD_MODEM_TYPE),xmm6260)
+-LOCAL_CFLAGS += -DMODEM_TYPE_XMM6260
+-endif
+-ifneq ($(filter m7450 mdm9x35 ss333 tss310 xmm7260,$(BOARD_MODEM_TYPE)),)
+-LOCAL_CFLAGS += -DSAMSUNG_NEXT_GEN_MODEM
+-endif
+-
+-ifeq ($(BOARD_MODEM_NEEDS_VIDEO_CALL_FIELD), true)
+-LOCAL_CFLAGS += -DNEEDS_VIDEO_CALL_FIELD
+-endif
+-
+-ifeq ($(BOARD_NEEDS_ROAMING_PROTOCOL_FIELD), true)
+-LOCAL_CFLAGS += -DNEEDS_ROAMING_PROTOCOL_FIELD
+-endif
+-
+-ifeq ($(BOARD_NEEDS_IMS_TYPE_FIELD), true)
+-LOCAL_CFLAGS += -DNEEDS_IMS_TYPE_FIELD
+-endif
+-
+-ifneq ($(DISABLE_RILD_OEM_HOOK),)
+-    LOCAL_CFLAGS += -DOEM_HOOK_DISABLED
+-endif
+-
+-LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
+-LOCAL_C_INCLUDES += external/nanopb-c
+-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../include
+-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/../include
+-
+-LOCAL_MODULE:= libril
+-LOCAL_SANITIZE := integer
+-
+-include $(BUILD_SHARED_LIBRARY)
+-
+-endif # BOARD_PROVIDES_LIBRIL
+diff --git a/ril/libril/Android.mk.disabled b/ril/libril/Android.mk.disabled
+new file mode 100644
+index 0000000000000000000000000000000000000000..f45023bc07aecec5380f43a5e704fa7c1d2cbe8c
+--- /dev/null
++++ b/ril/libril/Android.mk.disabled
+@@ -0,0 +1,73 @@
++# Copyright 2006 The Android Open Source Project
++
++ifeq ($(BOARD_PROVIDES_LIBRIL),true)
++
++LOCAL_PATH:= $(call my-dir)
++include $(CLEAR_VARS)
++
++LOCAL_VENDOR_MODULE := true
++
++LOCAL_SRC_FILES:= \
++    ril.cpp \
++    ril_event.cpp\
++    RilSapSocket.cpp \
++    ril_service.cpp \
++    sap_service.cpp
++
++LOCAL_SHARED_LIBRARIES := \
++    liblog \
++    libutils \
++    libcutils \
++    libhardware_legacy \
++    librilutils \
++    android.hardware.radio@1.0 \
++    android.hardware.radio.deprecated@1.0 \
++    libhidlbase
++
++LOCAL_STATIC_LIBRARIES := \
++    libprotobuf-c-nano-enable_malloc \
++
++LOCAL_CFLAGS += -Wno-unused-parameter
++
++ifeq ($(SIM_COUNT), 2)
++    LOCAL_CFLAGS += -DANDROID_MULTI_SIM -DDSDA_RILD1
++    LOCAL_CFLAGS += -DANDROID_SIM_COUNT_2
++endif
++
++ifneq ($(filter xmm6262 xmm6360,$(BOARD_MODEM_TYPE)),)
++LOCAL_CFLAGS += -DMODEM_TYPE_XMM6262
++endif
++ifeq ($(BOARD_MODEM_TYPE),xmm6260)
++LOCAL_CFLAGS += -DMODEM_TYPE_XMM6260
++endif
++ifneq ($(filter m7450 mdm9x35 ss333 tss310 xmm7260,$(BOARD_MODEM_TYPE)),)
++LOCAL_CFLAGS += -DSAMSUNG_NEXT_GEN_MODEM
++endif
++
++ifeq ($(BOARD_MODEM_NEEDS_VIDEO_CALL_FIELD), true)
++LOCAL_CFLAGS += -DNEEDS_VIDEO_CALL_FIELD
++endif
++
++ifeq ($(BOARD_NEEDS_ROAMING_PROTOCOL_FIELD), true)
++LOCAL_CFLAGS += -DNEEDS_ROAMING_PROTOCOL_FIELD
++endif
++
++ifeq ($(BOARD_NEEDS_IMS_TYPE_FIELD), true)
++LOCAL_CFLAGS += -DNEEDS_IMS_TYPE_FIELD
++endif
++
++ifneq ($(DISABLE_RILD_OEM_HOOK),)
++    LOCAL_CFLAGS += -DOEM_HOOK_DISABLED
++endif
++
++LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
++LOCAL_C_INCLUDES += external/nanopb-c
++LOCAL_C_INCLUDES += $(LOCAL_PATH)/../include
++LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/../include
++
++LOCAL_MODULE:= libril
++LOCAL_SANITIZE := integer
++
++include $(BUILD_SHARED_LIBRARY)
++
++endif # BOARD_PROVIDES_LIBRIL
+diff --git a/ril/libsecril-client/Android.mk b/ril/libsecril-client/Android.mk
+old mode 100755
+new mode 100644
+index 3aa68f4aef94b8ba89d881e48ddd1793e699fa6b..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+--- a/ril/libsecril-client/Android.mk
++++ b/ril/libsecril-client/Android.mk
+@@ -1,32 +0,0 @@
+-# Copyright 2006 The Android Open Source Project
+-
+-LOCAL_PATH:= $(call my-dir)
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES:= \
+-    secril-client.cpp
+-
+-LOCAL_SHARED_LIBRARIES := \
+-    libutils \
+-    libbinder \
+-    libcutils \
+-    libhardware_legacy \
+-    liblog
+-
+-LOCAL_CFLAGS := 
+-
+-ifeq ($(TARGET_BOARD_PLATFORM),exynos4)
+-LOCAL_CFLAGS += -DRIL_CALL_AUDIO_PATH_EXTRAVOLUME
+-endif
+-ifneq ($(filter m7450 mdm9x35 ss333 xmm7260,$(BOARD_MODEM_TYPE)),)
+-LOCAL_CFLAGS += -DSAMSUNG_NEXT_GEN_MODEM
+-endif
+-
+-ifeq ($(TARGET_USES_VND_SECRIL), true)
+-LOCAL_CFLAGS += -DUSES_VND_SECRIL
+-endif
+-
+-LOCAL_MODULE:= libsecril-client
+-LOCAL_PRELINK_MODULE := false
+-
+-include $(BUILD_SHARED_LIBRARY)
+diff --git a/ril/libsecril-client/Android.mk.disabled b/ril/libsecril-client/Android.mk.disabled
+new file mode 100755
+index 0000000000000000000000000000000000000000..3aa68f4aef94b8ba89d881e48ddd1793e699fa6b
+--- /dev/null
++++ b/ril/libsecril-client/Android.mk.disabled
+@@ -0,0 +1,32 @@
++# Copyright 2006 The Android Open Source Project
++
++LOCAL_PATH:= $(call my-dir)
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES:= \
++    secril-client.cpp
++
++LOCAL_SHARED_LIBRARIES := \
++    libutils \
++    libbinder \
++    libcutils \
++    libhardware_legacy \
++    liblog
++
++LOCAL_CFLAGS := 
++
++ifeq ($(TARGET_BOARD_PLATFORM),exynos4)
++LOCAL_CFLAGS += -DRIL_CALL_AUDIO_PATH_EXTRAVOLUME
++endif
++ifneq ($(filter m7450 mdm9x35 ss333 xmm7260,$(BOARD_MODEM_TYPE)),)
++LOCAL_CFLAGS += -DSAMSUNG_NEXT_GEN_MODEM
++endif
++
++ifeq ($(TARGET_USES_VND_SECRIL), true)
++LOCAL_CFLAGS += -DUSES_VND_SECRIL
++endif
++
++LOCAL_MODULE:= libsecril-client
++LOCAL_PRELINK_MODULE := false
++
++include $(BUILD_SHARED_LIBRARY)

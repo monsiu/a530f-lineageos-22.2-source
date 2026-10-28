@@ -1,0 +1,13 @@
+diff --git a/private/recovery.te b/private/recovery.te
+index 24dfd43a4ccce7de4d449a31091988cc75edd2b9..b7dbe4a01c354e7dc02d4908654280ba657e6108 100644
+--- a/private/recovery.te
++++ b/private/recovery.te
+@@ -169,7 +169,7 @@ recovery_only(`
+ 
+   # These are needed to update dynamic partitions in recovery.
+   r_dir_file(recovery, sysfs_dm)
+-  allowxperm recovery super_block_device_type:blk_file ioctl { BLKIOMIN BLKALIGNOFF };
++  allowxperm recovery { super_block_device_type system_block_device }:blk_file ioctl { BLKIOMIN BLKALIGNOFF BLKROSET };
+ 
+   # Allow using libfiemap/gsid directly (no binder in recovery).
+   allow recovery gsi_metadata_file_type:dir search;

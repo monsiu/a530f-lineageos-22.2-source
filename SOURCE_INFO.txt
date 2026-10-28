@@ -1,0 +1,9 @@
+﻿A530F LineageOS 22.2 source delta candidate
+
+Device: Samsung Galaxy A8 2018 SM-A530F (jackpotlte); Android 15; LineageOS 22.2.
+The authoritative baseline is manifest-pinned.xml. The kernel base is AlexFurina/Eureka-R25U-Jackpotlte at 47c82a9d84ad6e3b9a857d3dba1f7115090dc788; apply the corresponding kernel/samsung/exynos7885/changes.patch and restore the untracked source listed by metadata.json.
+
+This is a source-delta archive, not a full Android checkout. Sync pinned baselines, apply each project's changes.patch at that project root, restore regular files from projects/<path>/untracked/, and restore modes/symlinks from metadata.json. The stale, unsynced local manifest fragment has been removed. Development scratch backups, temporary files, and disabled build-file copies are recorded under excluded_untracked and omitted from the source tree.
+
+Two changed vendor projects remain excluded because their deltas include proprietary blobs. Exact vendor-source/license and build-reproducibility review is still required before publication. No ROM/recovery/GApps binaries, signing keys, passphrases, logs, or private local paths are included. This is a source delta for public review; it is not a complete Android checkout and does not establish exact build reproducibility. The two changed vendor projects are omitted because their original deltas include proprietary blobs. Use the pinned upstream references and review applicable licenses before redistribution or rebuilding.
+

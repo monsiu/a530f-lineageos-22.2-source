@@ -1,0 +1,33 @@
+diff --git a/common/vendor/gpsd.te b/common/vendor/gpsd.te
+index af8e7692621f59b306ad5dfe78151fae62485fe0..3fea19ae999ef0411120d90cc30f0b47ed513df5 100644
+--- a/common/vendor/gpsd.te
++++ b/common/vendor/gpsd.te
+@@ -1,4 +1,4 @@
+-type gpsd, domain, netdomain;
++type gpsd, domain, netdomain, mlstrustedsubject;
+ type gpsd_exec, exec_type, vendor_file_type, file_type;
+ 
+ # gpsd is started by init, type transit from init domain to gpsd domain
+diff --git a/common/vendor/hal_drm_widevine.te b/common/vendor/hal_drm_widevine.te
+index 07b98b2764487e2a2f2ff869385875fc12917936..627cfc11ef7e499371e6ea9b965deec197af9348 100644
+--- a/common/vendor/hal_drm_widevine.te
++++ b/common/vendor/hal_drm_widevine.te
+@@ -3,3 +3,18 @@ hal_server_domain(hal_drm_widevine, hal_drm);
+ 
+ type hal_drm_widevine_exec, exec_type, vendor_file_type, file_type;
+ init_daemon_domain(hal_drm_widevine);
++
++# rules from the jackpotlte device policy
++vndbinder_use(hal_drm_widevine);
++
++allow hal_drm_widevine efs_file:dir r_dir_perms;
++allow hal_drm_widevine sec_efs_file:file r_file_perms;
++
++allow hal_drm_widevine mediadrm_vendor_data_file:dir create_dir_perms;
++allow hal_drm_widevine mediadrm_vendor_data_file:file create_file_perms;
++
++allow hal_drm_widevine secmem_device:chr_file rw_file_perms;
++
++allow hal_drm_widevine mediacodec:fd use;
++
++dontaudit hal_drm_widevine media_data_file:dir search;

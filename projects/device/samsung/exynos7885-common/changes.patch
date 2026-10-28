@@ -1,0 +1,1121 @@
+diff --git a/BoardConfigCommon.mk b/BoardConfigCommon.mk
+index 198b134cc522573ce09126e1c4b27c104b75fdde..7b977085686b135a4f2b1521bdb720bc249aaf05 100644
+--- a/BoardConfigCommon.mk
++++ b/BoardConfigCommon.mk
+@@ -83,6 +83,7 @@ TARGET_KERNEL_SOURCE := kernel/samsung/exynos7885
+ 
+ # Kernel Toolchain
+ TARGET_KERNEL_CLANG_COMPILE := true
++TARGET_KERNEL_LLVM_BINUTILS := false
+ 
+ # Metadata
+ BOARD_USES_METADATA_PARTITION := true
+@@ -92,11 +93,12 @@ BOARD_SUPER_PARTITION_GROUPS := samsung_dynamic_partitions
+ BOARD_SAMSUNG_DYNAMIC_PARTITIONS_PARTITION_LIST := odm product system system_ext vendor
+ 
+ ifneq ($(WITH_GMS),true)
+-BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 629145600
++# Room for the full Google apps package (about 1.1 GB installed); taken from the system and system_ext reserves
++BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 1205862400
+ BOARD_PRODUCTIMAGE_EXTFS_INODE_COUNT := -1
+-BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 629145600
++BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 104857600
+ BOARD_SYSTEMIMAGE_EXTFS_INODE_COUNT := -1
+-BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 629145600
++BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 104857600
+ BOARD_SYSTEM_EXTIMAGE_EXTFS_INODE_COUNT := -1
+ endif
+ 
+@@ -121,6 +123,7 @@ BOARD_INCLUDE_RECOVERY_DTBO := true
+ endif
+ 
+ TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/configs/init/fstab.$(TARGET_BOOTLOADER_BOARD_NAME)
++AB_OTA_UPDATER := false
+ TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_exynos7885
+ 
+ # Releasetools
+@@ -157,6 +160,7 @@ VENDOR_SECURITY_PATCH := 2022-09-01 # G398FNXXSJCWF1
+ # Vintf
+ DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest.xml
+ DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
++DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(COMMON_PATH)/framework_compatibility_matrix.xml
+ 
+ # Wifi
+ BOARD_HOSTAPD_DRIVER := NL80211
+diff --git a/configs/init/init.recovery.exynos7884.rc b/configs/init/init.recovery.exynos7884.rc
+index 281ad153af9aa4261914a2d7b96507466ac13450..b1fa7220d7361725e1ee9434a218cd96b3791def 100644
+--- a/configs/init/init.recovery.exynos7884.rc
++++ b/configs/init/init.recovery.exynos7884.rc
+@@ -1,3 +1,4 @@
++# Exynos 7885 recovery USB uses configfs mode 1 with the guarded kernel fix.
+ on init
+     setprop sys.usb.configfs 1
+ 
+diff --git a/configs/init/init.samsung.rc b/configs/init/init.samsung.rc
+index a05218c8d75897f5b1e2cde0f0be1e07e00a8e38..ce48c1dc9d00e72e933bf8e8facee71f67596da3 100644
+--- a/configs/init/init.samsung.rc
++++ b/configs/init/init.samsung.rc
+@@ -96,6 +96,12 @@ on post-fs-data
+     mkdir /efs/nfc 0700 nfc nfc
+ 
+ on boot
++    # Start the power HAL boost worker (it waits for this property); without it no boosts run
++    setprop vendor.powerhal.init 1
++    # Memory speed floor: owned by system:radio with no group write, so the power HAL (uid 0, gid system) cannot open it
++    chown system system /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/scaling_devfreq_min
++    chmod 0664 /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/scaling_devfreq_min
++
+     # MSP: FactoryApp directory generation
+     mkdir /efs/FactoryApp 0775 system system
+ 
+@@ -549,3 +555,4 @@ on charger
+ # BATTERY
+ on property:sys.boot_completed=1
+     write /sys/class/power_supply/battery/boot_completed "1"
++    write /sys/class/sec/tsp/cmd set_grip_data,1,0,0,0,0
+diff --git a/configs/power/powerhint_exynos7885.json b/configs/power/powerhint_exynos7885.json
+index c2bb5fb03607421dfe0c2e8ca618b67f17dfe644..425d7ddd3e19d36590cfe3a66010dcd9fe30f8fa 100644
+--- a/configs/power/powerhint_exynos7885.json
++++ b/configs/power/powerhint_exynos7885.json
+@@ -79,44 +79,6 @@
+                 "coarse_demand"
+             ],
+             "ResetOnInit": true
+-        },
+-        {
+-            "Name": "PMQoSCpuDmaLatency",
+-            "Path": "/dev/cpu_dma_latency",
+-            "Values": [
+-                "44",
+-                "100"
+-            ],
+-            "HoldFd": true
+-        },
+-        {
+-            "Name": "TouchscreenEnable",
+-            "Path": "/sys/class/sec/tsp/input/enabled",
+-            "Values": [
+-                "1",
+-                "0"
+-            ],
+-            "ResetOnInit": true
+-        },
+-        {
+-            "Name": "DoubleTapToWakeEnable",
+-            "Path": "/sys/class/sec/tsp/cmd",
+-            "Values": [
+-                "aod_enable,0",
+-                "aod_enable,1"
+-            ],
+-            "DefaultIndex": 0,
+-            "ResetOnInit": false
+-        },
+-        {
+-            "Name": "DoubleTapToWakeRect",
+-            "Path": "/sys/devices/virtual/sec/tsp/cmd",
+-            "Values": [
+-                "set_aod_rect,0,0,0,0",
+-                "set_aod_rect,1080,2220,0,0"
+-            ],
+-            "DefaultIndex": 0,
+-            "ResetOnInit": false
+         }
+     ],
+     "Actions": [
+@@ -162,12 +124,6 @@
+             "Duration": 5000,
+             "Value": "always_on"
+         },
+-        {
+-            "PowerHint": "LAUNCH",
+-            "Node": "PMQoSCpuDmaLatency",
+-            "Duration": 5000,
+-            "Value": "44"
+-        },
+         {
+             "PowerHint": "CAMERA_LAUNCH",
+             "Node": "CPULittleClusterMinFreq",
+@@ -192,12 +148,6 @@
+             "Duration": 3000,
+             "Value": "always_on"
+         },
+-        {
+-            "PowerHint": "CAMERA_LAUNCH",
+-            "Node": "PMQoSCpuDmaLatency",
+-            "Duration": 3000,
+-            "Value": "44"
+-        },
+         {
+             "PowerHint": "CAMERA_SHOT",
+             "Node": "CPULittleClusterMinFreq",
+@@ -216,24 +166,6 @@
+             "Duration": 1000,
+             "Value": "1794000"
+         },
+-        {
+-            "PowerHint": "CAMERA_SHOT",
+-            "Node": "PMQoSCpuDmaLatency",
+-            "Duration": 1000,
+-            "Value": "44"
+-        },
+-        {
+-            "PowerHint": "AUDIO_LAUNCH",
+-            "Node": "PMQoSCpuDmaLatency",
+-            "Duration": 2000,
+-            "Value": "44"
+-        },
+-        {
+-            "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
+-            "Node": "PMQoSCpuDmaLatency",
+-            "Duration": 0,
+-            "Value": "44"
+-        },
+         {
+             "PowerHint": "Flipendo",
+             "Node": "CPULittleClusterMaxFreq",
+@@ -258,12 +190,6 @@
+             "Duration": 0,
+             "Value": "1976000"
+         },
+-        {
+-            "PowerHint": "ML_ACC",
+-            "Node": "PMQoSCpuDmaLatency",
+-            "Duration": 2000,
+-            "Value": "44"
+-        },
+         {
+             "PowerHint": "FIXED_PERFORMANCE",
+             "Node": "CPULittleClusterMinFreq",
+@@ -277,22 +203,28 @@
+             "Value": "2184000"
+         },
+         {
+-            "PowerHint": "INTERACTIVE",
+-            "Node": "TouchscreenEnable",
++            "PowerHint": "INTERACTION",
++            "Node": "CPULittleClusterMinFreq",
+             "Duration": 0,
+-            "Value": "1"
++            "Value": "1248000"
+         },
+         {
+-            "PowerHint": "DOUBLE_TAP_TO_WAKE",
+-            "Node": "DoubleTapToWakeEnable",
++            "PowerHint": "INTERACTION",
++            "Node": "CPUBigClusterMinFreq",
+             "Duration": 0,
+-            "Value": "aod_enable,1"
++            "Value": "1560000"
+         },
+         {
+-            "PowerHint": "DOUBLE_TAP_TO_WAKE",
+-            "Node": "DoubleTapToWakeRect",
++            "PowerHint": "INTERACTION",
++            "Node": "GPUMinFreq",
+             "Duration": 0,
+-            "Value": "set_aod_rect,1080,2220,0,0"
++            "Value": "676000"
++        },
++        {
++            "PowerHint": "INTERACTION",
++            "Node": "MemFreq",
++            "Duration": 0,
++            "Value": "1794000"
+         }
+     ]
+ }
+diff --git a/exynos7885.mk b/exynos7885.mk
+index 6afaf47ef174a9a3f458bf69ce2cdba8811df3e3..832ba99bff4897fd2bed937ca9d3843618f3295d 100644
+--- a/exynos7885.mk
++++ b/exynos7885.mk
+@@ -15,11 +15,10 @@ $(call inherit-product, hardware/samsung_slsi-linaro/config/config.mk)
+ 
+ # Audio
+ PRODUCT_PACKAGES += \
+-    android.hardware.audio@4.0-impl \
+-    android.hardware.audio.effect@4.0-impl \
++    android.hardware.audio@6.0-impl \
++    android.hardware.audio.effect@6.0-impl \
+     android.hardware.audio.service \
+     android.hardware.bluetooth.audio@2.0-impl \
+-    audio.a2dp.default \
+     audio.bluetooth.default \
+     audio.r_submix.default \
+     audio.usb.default \
+@@ -75,11 +74,10 @@ PRODUCT_PACKAGES += \
+ 
+ # Doze
+ PRODUCT_PACKAGES += \
+-    SamsungDoze
+ 
+ # DRM
+ PRODUCT_PACKAGES += \
+-    android.hardware.drm@1.3-service.clearkey
++    android.hardware.drm-service.clearkey
+ 
+ # Dynamic Partitions
+ PRODUCT_USE_DYNAMIC_PARTITIONS := true
+@@ -146,9 +144,7 @@ PRODUCT_PACKAGES += \
+ 
+ # NFC
+ PRODUCT_PACKAGES += \
+-    NfcNci \
+-    Tag \
+-    com.android.nfc_extras
++    Tag
+ 
+ # OMX
+ PRODUCT_PACKAGES += \
+@@ -208,7 +204,7 @@ PRODUCT_COPY_FILES += \
+ 
+ # Power
+ PRODUCT_PACKAGES += \
+-    android.hardware.power-service.samsung-libperfmgr
++    android.hardware.power-service.lineage-libperfmgr
+ 
+ PRODUCT_COPY_FILES += \
+     $(COMMON_PATH)/configs/power/powerhint_$(TARGET_BOOTLOADER_BOARD_NAME).json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+@@ -226,8 +222,11 @@ PRODUCT_PACKAGES += \
+ 
+ # Sensors
+ PRODUCT_PACKAGES += \
+-    android.hardware.sensors@1.0-impl \
+-    android.hardware.sensors@1.0-service
++    android.hardware.sensors@2.1-service.multihal \
++    sensors.subhal.exynos7885
++
++PRODUCT_COPY_FILES += \
++    $(COMMON_PATH)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+ 
+ # Shims
+ PRODUCT_PACKAGES += \
+@@ -238,7 +237,9 @@ PRODUCT_SOONG_NAMESPACES += \
+     $(COMMON_PATH) \
+     hardware/google/interfaces \
+     hardware/google/pixel \
+-    hardware/samsung/aidl/power-libperfmgr
++    external/OpenCL-ICD-Loader \
++    hardware/samsung_slsi/libbt \
++    hardware/lineage/interfaces/power-libperfmgr
+ 
+ # Touch HAL
+ PRODUCT_PACKAGES += \
+@@ -249,7 +250,6 @@ PRODUCT_USE_VNDK_OVERRIDE := true
+ 
+ # Trust HAL
+ PRODUCT_PACKAGES += \
+-    vendor.lineage.trust@1.0-service
+ 
+ # Vibrator
+ PRODUCT_PACKAGES += \
+@@ -259,10 +259,9 @@ PRODUCT_PACKAGES += \
+ PRODUCT_PACKAGES += \
+     TetheringConfigOverlay \
+     WifiOverlay \
+-    android.hardware.wifi@1.0-service \
++    android.hardware.wifi-service \
+     hostapd \
+     wpa_supplicant \
+-    wpa_supplicant.conf
+ 
+ PRODUCT_COPY_FILES += \
+     $(COMMON_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
+@@ -270,3 +269,4 @@ PRODUCT_COPY_FILES += \
+     $(COMMON_PATH)/configs/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf
+ 
+ PRODUCT_CFI_INCLUDE_PATHS += hardware/samsung_slsi/scsc_wifibt/wpa_supplicant_lib
++
+diff --git a/framework_compatibility_matrix.xml b/framework_compatibility_matrix.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000..50c06c30bd910cadbf0338e64c7293f16ea9c42d
+--- /dev/null
++++ b/framework_compatibility_matrix.xml
+@@ -0,0 +1,236 @@
++<compatibility-matrix version="1.0" type="framework">
++    <hal format="hidl" optional="true">
++        <name>android.hardware.light</name>
++        <version>2.0</version>
++        <interface>
++            <name>ILight</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>android.hardware.vibrator</name>
++        <version>1.3</version>
++        <interface>
++            <name>IVibrator</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.lineage.livedisplay</name>
++        <version>2.0</version>
++        <interface>
++            <name>IDisplayColorCalibration</name>
++            <instance>default</instance>
++        </interface>
++        <interface>
++            <name>IDisplayModes</name>
++            <instance>default</instance>
++        </interface>
++        <interface>
++            <name>IReadingEnhancement</name>
++            <instance>default</instance>
++        </interface>
++        <interface>
++            <name>ISunlightEnhancement</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.lineage.touch</name>
++        <version>1.0</version>
++        <interface>
++            <name>IGloveMode</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.nxp.nxpnfc</name>
++        <version>1.1</version>
++        <interface>
++            <name>INxpNfc</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.audio</name>
++        <version>1.0</version>
++        <interface>
++            <name>ISehDevicesFactory</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.bluetooth</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehBluetooth</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.camera.provider</name>
++        <version>4.0</version>
++        <interface>
++            <name>ISehCameraProvider</name>
++            <instance>legacy/0</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.gnss</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehGnss</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.miscpower</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehMiscPower</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.radio.bridge</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehBridge</name>
++            <instance>slot1</instance>
++            <instance>slot2</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.radio.channel</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehChannel</name>
++            <instance>epdgd</instance>
++            <instance>epdgd2</instance>
++            <instance>imsd</instance>
++            <instance>imsd2</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.radio</name>
++        <version>2.1</version>
++        <interface>
++            <name>ISehRadio</name>
++            <instance>slot1</instance>
++            <instance>slot2</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.security.drk</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehDrk</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.security.proca</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehProca</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.security.securestorage</name>
++        <version>3.0</version>
++        <interface>
++            <name>ISehSecureStorage</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.security.widevine.keyprov</name>
++        <version>1.0</version>
++        <interface>
++            <name>ISehWidevineKeyProvisioning</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.security.wsm</name>
++        <version>1.0</version>
++        <interface>
++            <name>ISehWsm</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.snap</name>
++        <version>1.2</version>
++        <interface>
++            <name>ISehSnap</name>
++            <instance>default</instance>
++            <instance>secsnap</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.sysinput</name>
++        <version>1.1</version>
++        <interface>
++            <name>ISehSysInputDev</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.tlc.ucm</name>
++        <version>2.0</version>
++        <interface>
++            <name>ISehUcm</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.vibrator</name>
++        <version>2.2</version>
++        <interface>
++            <name>ISehVibrator</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung.hardware.wifi.supplicant</name>
++        <version>3.0</version>
++        <interface>
++            <name>ISehSupplicant</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung_slsi.hardware.ExynosHWCServiceTW</name>
++        <version>1.0</version>
++        <interface>
++            <name>IExynosHWCServiceTW</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.samsung_slsi.hardware.configstore</name>
++        <version>1.0</version>
++        <interface>
++            <name>IExynosHWCConfigs</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.trustonic.tee</name>
++        <version>1.0</version>
++        <interface>
++            <name>ITee</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++    <hal format="hidl" optional="true">
++        <name>vendor.trustonic.teeregistry</name>
++        <version>1.0</version>
++        <interface>
++            <name>ITeeRegistry</name>
++            <instance>default</instance>
++        </interface>
++    </hal>
++</compatibility-matrix>
+diff --git a/init/Android.bp b/init/Android.bp
+index d79e9de6d45f725079cde30ef5e091b3b51964a3..496602e48f180ecf10b2c9048265913b656fb7f7 100644
+--- a/init/Android.bp
++++ b/init/Android.bp
+@@ -10,7 +10,7 @@ cc_library_static {
+     shared_libs: ["libbase"],
+     srcs: ["init_exynos7885.cpp"],
+     include_dirs: [
+-        "system/core/base/include",
++        "system/libbase/include",
+         "system/core/init"
+     ]
+ }
+diff --git a/manifest.xml b/manifest.xml
+index ee73f0bf573b5e3dd48bc0836a4687de0329cca6..6de53a97d2ffbeab90eb59aaa4d2a2d75bc06094 100644
+--- a/manifest.xml
++++ b/manifest.xml
+@@ -1,8 +1,8 @@
+-<manifest version="2.0" type="device" target-level="3">
++<manifest version="2.0" type="device" target-level="5">
+     <hal format="hidl">
+         <name>android.hardware.audio</name>
+         <transport>hwbinder</transport>
+-        <version>4.0</version>
++        <version>6.0</version>
+         <interface>
+             <name>IDevicesFactory</name>
+             <instance>default</instance>
+@@ -11,7 +11,7 @@
+     <hal format="hidl">
+         <name>android.hardware.audio.effect</name>
+         <transport>hwbinder</transport>
+-        <version>4.0</version>
++        <version>6.0</version>
+         <interface>
+             <name>IEffectsFactory</name>
+             <instance>default</instance>
+@@ -90,15 +90,6 @@
+             <instance>default</instance>
+         </interface>
+     </hal>
+-    <hal format="hidl">
+-        <name>android.hardware.health</name>
+-        <transport>hwbinder</transport>
+-        <version>2.1</version>
+-        <interface>
+-            <name>IHealth</name>
+-            <instance>default</instance>
+-        </interface>
+-    </hal>
+     <hal format="hidl" override="true">
+         <name>android.hardware.light</name>
+         <transport>hwbinder</transport>
+@@ -164,15 +155,7 @@
+         <name>android.hardware.radio.deprecated</name>
+         <transport>hwbinder</transport>
+     </hal>
+-    <hal format="hidl">
+-        <name>android.hardware.sensors</name>
+-        <transport>hwbinder</transport>
+-        <version>1.0</version>
+-        <interface>
+-            <name>ISensors</name>
+-            <instance>default</instance>
+-        </interface>
+-    </hal>
++    <!-- sensors 1.0 removed: conflicts with the 2.1 stopgap fragment (VINTF "Conflicting FqInstance") -->
+     <hal format="hidl">
+         <name>vendor.lineage.livedisplay</name>
+         <transport>hwbinder</transport>
+diff --git a/overlay/frameworks/base/core/res/res/values/config.xml b/overlay/frameworks/base/core/res/res/values/config.xml
+index de8b3d0ecf7a94804976b3a42c0200deb218b04c..e08ff460865cd4db180c46ed2317dab8f94e16f5 100644
+--- a/overlay/frameworks/base/core/res/res/values/config.xml
++++ b/overlay/frameworks/base/core/res/res/values/config.xml
+@@ -108,7 +108,7 @@
+ 
+          Note that doze dreams are not subject to the same start conditions as ordinary dreams.
+          Doze dreams will run whenever the power manager is in a dozing state. -->
+-    <string name="config_dozeComponent" translatable="false">com.android.systemui/com.android.systemui.doze.DozeService</string>
++    <string name="config_dozeComponent" translatable="false"></string>
+ 
+     <!-- Power Management: Specifies whether to decouple the auto-suspend state of the
+          device from the display on/off state.
+@@ -162,7 +162,7 @@
+ 
+     <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
+          on the headphone/microphone jack. When false use the older uevent framework. -->
+-    <bool name="config_useDevInputEventForAudioJack">true</bool>
++    <bool name="config_useDevInputEventForAudioJack">false</bool>
+ 
+     <!-- FP trustled limits the number to 4. -->
+     <integer name="config_fingerprintMaxTemplatesPerUser">4</integer>
+@@ -293,4 +293,5 @@
+ 
+     <!-- If this is true, device supports Sustained Performance Mode. -->
+     <bool name="config_sustainedPerformanceModeSupported">true</bool>
++    <bool name="config_stk_sms_send_support">true</bool>
+ </resources>
+diff --git a/product.prop b/product.prop
+index 37becf3126e70ab5d245779d5d8486e8dcefdc59..ffbf3a266294c79f304fd3fb8935897a71d9901a 100644
+--- a/product.prop
++++ b/product.prop
+@@ -1,2 +1,5 @@
+ # Charger
+ ro.charger.enable_suspend=true
++
++# Android 15 media code needs FUSE storage; the 4.4 kernel still has the old sdcardfs, which broke picking photos for MMS
++external_storage.sdcardfs.enabled=false
+diff --git a/proprietary-files.txt b/proprietary-files.txt
+index df610b9106819977b05e2c6117fcab30a2f9b8c2..b1b0a74c0ad985acead1c9ac8c75f7eb1375687e 100644
+--- a/proprietary-files.txt
++++ b/proprietary-files.txt
+@@ -77,3 +77,10 @@ vendor/etc/wifi/mx140_t_wlan_t.hcf
+ vendor/etc/wifi/mx140_wlan.hcf
+ vendor/etc/wifi/mx140_wlan_t.hcf
+ vendor/etc/wifi/platform.txt
++
++# Samsung stock audio helpers (taken from SM-A530F stock firmware /system/lib, 32-bit, renamed to libalsa_sec and libaroute_sec because Android has its own libtinyalsa and libaudioroute; audio.primary.exynos7885.so has the two names swapped in place (same length, no patchelf)); the audio HAL needs audio_route_get_mixer_ctl
++vendor/lib/libaroute_sec.so
++vendor/lib/libalsa_sec.so
++
++# Widevine L1 (HD): Samsung stock OEMCrypto library, 32-bit, from SM-A530F stock firmware /vendor/lib
++vendor/lib/liboemcrypto.so
+diff --git a/recovery/Android.bp b/recovery/Android.bp
+index d9f59cc97a32df05c6d3f0c52619fe7e3cf180ee..24f52de8c590d4c851de8b3ec4f3ea6a97734503 100644
+--- a/recovery/Android.bp
++++ b/recovery/Android.bp
+@@ -22,7 +22,7 @@ cc_library_static {
+     header_libs: ["libbase_headers"],
+     include_dirs: [
+         "bootable/recovery",
+-        "bootable/recovery/edify/include",
++        "bootable/deprecated-ota/edify/include",
+         "bootable/recovery/otautil/include"
+     ],
+     static_libs: ["liblp"],
+diff --git a/sepolicy/vendor/device.te b/sepolicy/vendor/device.te
+index ceb4f1e6c957d44014681c096dedc94829c4abfb..baf0077182e6d293d1f37d5118dda410ac56d9ad 100644
+--- a/sepolicy/vendor/device.te
++++ b/sepolicy/vendor/device.te
+@@ -1,12 +1,10 @@
+ # GPS
+-type gnss_device, dev_type;
+ 
+ # Media
+ type m2m1shot_device, dev_type;
+ 
+ # Partitions
+ type cpdebug_block_device, dev_type;
+-type cpefs_block_device, dev_type;
+ 
+ # Secmem
+ type secmem_device, dev_type;
+diff --git a/sepolicy/vendor/file.te b/sepolicy/vendor/file.te
+index 066fab3edfb4dc23a6875b2d9be8dac3397ef1fa..a28291697c14b7bd89b732f205b5dc033873a88b 100644
+--- a/sepolicy/vendor/file.te
++++ b/sepolicy/vendor/file.te
+@@ -3,7 +3,6 @@ type debugfs_ion, fs_type, debugfs_type;
+ type debugfs_mali_mem, fs_type, debugfs_type;
+ 
+ # Display
+-type display_vendor_data_file, file_type, data_file_type;
+ 
+ # DRM
+ type mediadrm_vendor_data_file, file_type, data_file_type;
+@@ -12,6 +11,11 @@ type mediadrm_vendor_data_file, file_type, data_file_type;
+ type cpdebug_efs_file, file_type;
+ type factoryprop_efs_file, file_type;
+ type sensor_factoryapp_efs_file, file_type;
++# Labels already on the phone EFS partition (written by Samsung stock); must exist or they read as unlabeled
++type dak_efs_file, file_type;
++type taas_efs_file, file_type;
++type ssm_efs_file, file_type;
++type dsms_efs_file, file_type;
+ 
+ # RIL
+ type simslot_count_file, fs_type, proc_type;
+@@ -20,6 +24,12 @@ type simslot_count_file, fs_type, proc_type;
+ type sensor_vendor_data_file, file_type, data_file_type;
+ 
+ # Sysfs
++# AOSP's own sysfs_udc type exists but is pinned to a newer sepolicy
++# version than this project's vendor build uses - the vendor/system build
++# failed with "unknown type sysfs_udc" even though recovery's separate
++# policy compile accepted it fine. Declared here instead, fully owned by
++# this device tree, so it compiles the same in both builds (26 Oct).
++type sysfs_usb_udc_writable, sysfs_type, rw_fs_type, fs_type;
+ type sysfs_bluetooth, sysfs_type, rw_fs_type, fs_type;
+ type sysfs_camera, sysfs_type, r_fs_type, fs_type;
+ type sysfs_camera_writable, sysfs_type, rw_fs_type, fs_type;
+@@ -28,7 +38,6 @@ type sysfs_decon, sysfs_type, r_fs_type, fs_type;
+ type sysfs_decon_writable, sysfs_type, rw_fs_type, fs_type;
+ type sysfs_input_writable, sysfs_type, rw_fs_type, fs_type;
+ type sysfs_gps, fs_type, sysfs_type, mlstrustedobject;
+-type sysfs_gpu, sysfs_type, r_fs_type, fs_type;
+ type sysfs_gpu_writable, sysfs_type, rw_fs_type, fs_type;
+ type sysfs_info, sysfs_type, r_fs_type, fs_type;
+ type sysfs_leds_writable, sysfs_type, rw_fs_type, fs_type;
+diff --git a/sepolicy/vendor/file_contexts b/sepolicy/vendor/file_contexts
+index 8926a4eeed68285eec7cda929a31504e26b6cf1e..894b5b40c7b4065c1bfc154fc57e826cfc2263c4 100644
+--- a/sepolicy/vendor/file_contexts
++++ b/sepolicy/vendor/file_contexts
+@@ -1,5 +1,4 @@
+ # Block
+-/sys/devices/platform/13500000.dwmmc0/mmc_host/mmc0/mmc0:0001/block/mmcblk0/queue/scheduler	u:object_r:sysfs_io_sched_tuneable:s0
+ 
+ # Bluetooth
+ /dev/scsc_h4_0											u:object_r:bt_device:s0
+@@ -16,8 +15,6 @@
+ 
+ # DRM
+ /data/vendor/mediadrm(/.*)?									u:object_r:mediadrm_vendor_data_file:s0
+-/(vendor|system/vendor)/bin/hw/android\.hardware\.drm@[0-9]\.[0-9]-service\.clearkey		u:object_r:hal_drm_clearkey_exec:s0
+-/(vendor|system/vendor)/bin/hw/android\.hardware\.drm@[0-9]\.[0-9]-service\.widevine		u:object_r:hal_drm_widevine_exec:s0
+ 
+ # EFS
+ /efs/FactoryApp(/.*)?										u:object_r:app_efs_file:s0
+@@ -39,17 +36,14 @@
+ /sys/devices/soc0/machine									u:object_r:sysfs_gps:s0
+ /sys/devices/soc0/revision									u:object_r:sysfs_gps:s0
+ /(vendor|system/vendor)/bin/hw/gps.sh								u:object_r:gpsd_exec:s0
+-/(vendor|system/vendor)/bin/hw/gpsd								u:object_r:gpsd_exec:s0
+ /(vendor|system/vendor)/bin/hw/vendor\.samsung\.hardware\.gnss@[0-9]\.[0-9]-service		u:object_r:hal_gnss_default_exec:s0
+ 
+ # Graphics
+ /dev/fimg2d											u:object_r:graphics_device:s0
+ /dev/mali[0-9]											u:object_r:gpu_device:s0
+ /(vendor|system/vendor)/lib(64)?/hw/gralloc\.exynos[0-9]*\.so					u:object_r:same_process_hal_file:s0
+-/(vendor|system/vendor)/lib(64)?/libion_exynos\.so						u:object_r:same_process_hal_file:s0
+ 
+ # Keymaster
+-/(vendor|system/vendor)/bin/hw/android\.hardware\.keymaster@[0-9]\.[0-9]-service\.samsung	u:object_r:hal_keymaster_default_exec:s0
+ 
+ # LEDs
+ /sys/devices/virtual/sec/led/led(.*)								u:object_r:sysfs_leds_writable:s0
+@@ -66,7 +60,6 @@
+ # NFC
+ /dev/pn547											u:object_r:nfc_device:s0
+ /dev/sec-nfc											u:object_r:nfc_device:s0
+-/(vendor|system/vendor)/bin/hw/android\.hardware\.nfc@[0-9]\.[0-9]-service\.samsung		u:object_r:hal_nfc_default_exec:s0
+ 
+ # Partitions
+ /dev/block/platform/.+/by-name/BOOT								u:object_r:boot_block_device:s0
+@@ -80,6 +73,7 @@
+ /dev/block/platform/.+/by-name/RADIO								u:object_r:radio_block_device:s0
+ /dev/block/platform/.+/by-name/RECOVERY								u:object_r:recovery_block_device:s0
+ /dev/block/platform/.+/by-name/SYSTEM								u:object_r:super_block_device:s0
++/dev/block/platform/13500000[.]dwmmc0/by-name/SYSTEM					u:object_r:super_block_device:s0
+ /dev/block/platform/.+/by-name/USERDATA								u:object_r:userdata_block_device:s0
+ 
+ # Secmem
+@@ -97,13 +91,14 @@
+ /sys/devices/virtual/sensors/sensor_dev/flush							u:object_r:sysfs_sensors_writable:s0
+ 
+ # TEE
+-/(vendor|system/vendor)/bin/mcDriverDaemon							u:object_r:tee_exec:s0
+ 
+ # Vibrator
+ /(vendor|system/vendor)/bin/hw/android\.hardware\.vibrator@[0-9]\.[0-9]-service\.samsung	u:object_r:hal_vibrator_default_exec:s0
+ 
+ # Wifi
+-/(vendor|system/vendor)/bin/hw/macloader							u:object_r:macloader_exec:s0
+ 
+ # ZRAM
+ /dev/block/zram0										u:object_r:swap_block_device:s0
++/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch@1\.0-service\.samsung	u:object_r:hal_lineage_touch_default_exec:s0
++/(vendor|system/vendor)/bin/hw/android\.hardware\.sensors@2\.1-service\.mock	u:object_r:hal_sensors_default_exec:s0
++/(vendor|system/vendor)/bin/hw/android\.hardware\.sensors@2\.1-service\.multihal	u:object_r:hal_sensors_default_exec:s0
+diff --git a/sepolicy/vendor/genfs_contexts b/sepolicy/vendor/genfs_contexts
+index f902c7afa673a138ec5ebf02220057ff8839593c..d30de781bf46081102870736c9e89a76a5eb05bc 100644
+--- a/sepolicy/vendor/genfs_contexts
++++ b/sepolicy/vendor/genfs_contexts
+@@ -33,7 +33,6 @@ genfscon sysfs /firmware/devicetree/base/model_info-system_rev							u:object_r:
+ genfscon sysfs /devices/platform/11500000.mali/power_policy							u:object_r:sysfs_gpu_writable:s0
+ genfscon sysfs /kernel/gpu/gpu_freq_table									u:object_r:sysfs_gpu:s0
+ genfscon sysfs /kernel/gpu/gpu_max_clock									u:object_r:sysfs_gpu_writable:s0
+-genfscon sysfs /kernel/gpu/gpu_min_clock									u:object_r:sysfs_gpu_writable:s0
+ 
+ # Input
+ genfscon sysfs /devices/platform/13870000.i2c/i2c-9/9-0048/input/input1/enabled					u:object_r:sysfs_input_writable:s0
+@@ -60,5 +59,15 @@ genfscon sysfs /devices/platform/11ce0000.speedy/i2c-6/6-0000/s2mpu08-rtc/rtc/rt
+ # Touchkey
+ genfscon sysfs /devices/virtual/sec/sec_key/navbar_enabled							u:object_r:sysfs_sec_key_writable:s0
+ 
++# USB gadget (UDC class) - recovery's init.rc writes "connect" to soft_connect
++# directly (26 Oct), since recovery has no usbd service to do that for it.
++# The upstream AOSP rule uses the /class/udc alias and its own sysfs_udc
++# type, but neither worked here: the alias never resolved on this kernel
++# (confirmed live, twice - readlink -f gave the real path below instead),
++# and sysfs_udc itself turned out to be pinned to a newer sepolicy version
++# than this project's vendor build uses (broke the full build with
++# "unknown type sysfs_udc"). Own type declared in file.te instead.
++genfscon sysfs /devices/platform/13600000.usb/13600000.dwc3/udc/13600000.dwc3			u:object_r:sysfs_usb_udc_writable:s0
++
+ # ZRAM
+ genfscon proc /sys/vm/swappiness										u:object_r:proc_swappiness:s0
+diff --git a/sepolicy/vendor/gpsd.te b/sepolicy/vendor/gpsd.te
+index db106347269dec262f0a9d7db535f13888e83126..55eaa2cd636e95fadbd367be07db738695386fab 100644
+--- a/sepolicy/vendor/gpsd.te
++++ b/sepolicy/vendor/gpsd.te
+@@ -8,3 +8,8 @@ allow gpsd gnss_device:chr_file rw_file_perms;
+ allow gpsd self:capability net_raw;
+ 
+ allow gpsd sysfs_wake_lock:file rw_file_perms;
++
++get_prop(gpsd, bootanim_system_prop)
++binder_use(gpsd)
++allow gpsd system_data_file:dir search;
++allow gpsd hal_system_suspend_service:service_manager find;
+diff --git a/sepolicy/vendor/hal_drm_clearkey.te b/sepolicy/vendor/hal_drm_clearkey.te
+deleted file mode 100644
+index da9ce6ca1d5ab057ebf969890533fd18e870f331..0000000000000000000000000000000000000000
+--- a/sepolicy/vendor/hal_drm_clearkey.te
++++ /dev/null
+@@ -1,5 +0,0 @@
+-type hal_drm_clearkey, domain;
+-hal_server_domain(hal_drm_clearkey, hal_drm);
+-
+-type hal_drm_clearkey_exec, exec_type, vendor_file_type, file_type;
+-init_daemon_domain(hal_drm_clearkey);
+diff --git a/sepolicy/vendor/hal_drm_widevine.te b/sepolicy/vendor/hal_drm_widevine.te
+deleted file mode 100644
+index 84c6b83f782975eba91387a9d861145b7e819d28..0000000000000000000000000000000000000000
+--- a/sepolicy/vendor/hal_drm_widevine.te
++++ /dev/null
+@@ -1,19 +0,0 @@
+-type hal_drm_widevine, domain;
+-hal_server_domain(hal_drm_widevine, hal_drm);
+-
+-type hal_drm_widevine_exec, exec_type, vendor_file_type, file_type;
+-init_daemon_domain(hal_drm_widevine);
+-
+-vndbinder_use(hal_drm_widevine);
+-
+-allow hal_drm_widevine efs_file:dir r_dir_perms;
+-allow hal_drm_widevine sec_efs_file:file r_file_perms;
+-
+-allow hal_drm_widevine mediadrm_vendor_data_file:dir create_dir_perms;
+-allow hal_drm_widevine mediadrm_vendor_data_file:file create_file_perms;
+-
+-allow hal_drm_widevine secmem_device:chr_file rw_file_perms;
+-
+-allow hal_drm_widevine mediacodec:fd use;
+-
+-dontaudit hal_drm_widevine media_data_file:dir search;
+diff --git a/sepolicy/vendor/hal_gatekeeper_default.te b/sepolicy/vendor/hal_gatekeeper_default.te
+index 02e4dec5632468503a5a56f74c5248274e3cc450..49a6d3c49b8408ff0b6056530745cf2ecc1dc27d 100644
+--- a/sepolicy/vendor/hal_gatekeeper_default.te
++++ b/sepolicy/vendor/hal_gatekeeper_default.te
+@@ -7,3 +7,5 @@ allow hal_gatekeeper_default gatekeeper_efs_file:file create_file_perms;
+ 
+ allow hal_gatekeeper_default prov_efs_file:dir rw_dir_perms;
+ allow hal_gatekeeper_default prov_efs_file:file rw_file_perms;
++allow hal_gatekeeper_default dak_efs_file:dir rw_dir_perms;
++allow hal_gatekeeper_default dak_efs_file:file rw_file_perms;
+diff --git a/sepolicy/vendor/hal_gnss_default.te b/sepolicy/vendor/hal_gnss_default.te
+index 6c23b4106606f64de3c3e71c47a3f2f1340f8634..16a610c78b28a093ec04d0964d184065568907f9 100644
+--- a/sepolicy/vendor/hal_gnss_default.te
++++ b/sepolicy/vendor/hal_gnss_default.te
+@@ -1,2 +1,3 @@
+ allow hal_gnss_default fwk_sensor_hwservice:hwservice_manager find;
+ allow hal_gnss_default gpsd:unix_stream_socket connectto;
++allow hal_gnss_default fwk_sensor_service:service_manager find;
+diff --git a/sepolicy/vendor/hal_keymaster_default.te b/sepolicy/vendor/hal_keymaster_default.te
+index 6007cd3d094b749f3e9fd9434dae5bfbf9e2f8e9..587a1e53e31b2a1d55c90a7d54322a0e6db6897a 100644
+--- a/sepolicy/vendor/hal_keymaster_default.te
++++ b/sepolicy/vendor/hal_keymaster_default.te
+@@ -1 +1,2 @@
+ r_dir_file(hal_keymaster_default, prov_efs_file);
++r_dir_file(hal_keymaster_default, dak_efs_file);
+diff --git a/sepolicy/vendor/hal_power_default.te b/sepolicy/vendor/hal_power_default.te
+index b2223e6fdebac838eaa897a78a026abcf1264dcf..d11e17ad5f4bf8290335dd6187602acb2f6ecccd 100644
+--- a/sepolicy/vendor/hal_power_default.te
++++ b/sepolicy/vendor/hal_power_default.te
+@@ -4,6 +4,7 @@ allow hal_power_default sysfs_battery:dir search;
+ 
+ allow hal_power_default {
+     sysfs_battery_writable
++    sysfs_gpu
+     sysfs_gpu_writable
+     sysfs_input_writable
+     sysfs_mif_writable
+diff --git a/sepolicy/vendor/hwservice_contexts b/sepolicy/vendor/hwservice_contexts
+index bf9d0ae93de1a44c01b3f53c96e1b958d6bad2e3..aa1a23c3326c4fa8d7da7e87515fea0d0c302a2f 100644
+--- a/sepolicy/vendor/hwservice_contexts
++++ b/sepolicy/vendor/hwservice_contexts
+@@ -5,6 +5,3 @@ vendor.samsung.hardware.gnss::ISehGnss				u:object_r:hal_gnss_hwservice:s0
+ vendor.nxp.nxpnfc::INxpNfc					u:object_r:hal_nfc_hwservice:s0
+ 
+ # Radio
+-vendor.samsung.hardware.radio::ISehRadio			u:object_r:hal_sec_radio_hwservice:s0
+-vendor.samsung.hardware.radio.bridge::ISehBridge		u:object_r:hal_sec_radio_bridge_hwservice:s0
+-vendor.samsung.hardware.radio.channel::ISehChannel		u:object_r:hal_sec_radio_channel_hwservice:s0
+diff --git a/sepolicy/vendor/init.te b/sepolicy/vendor/init.te
+index 136e37ba7e6b1eb656ca373bfc37c7d9de25441d..6e9ddf704e8cfed8416d5673228add5cd55036cf 100644
+--- a/sepolicy/vendor/init.te
++++ b/sepolicy/vendor/init.te
+@@ -6,3 +6,8 @@ allow init efs_file:dir mounton;
+ allow init mnt_vendor_file:dir mounton;
+ 
+ allow init kernel:system module_request;
++
++# recovery's init.rc writes "connect" to the UDC class soft_connect node
++# directly (26 Oct) to finish enabling USB, since recovery has no usbd
++# service to do it the normal way.
++allow init sysfs_usb_udc_writable:file rw_file_perms;
+diff --git a/sepolicy/vendor/property.te b/sepolicy/vendor/property.te
+index bacaa41b81d5978aa5e86debac48fbc90c1085f0..30cd6100eb6073129cbe2c3604a87cf4c86e8234 100644
+--- a/sepolicy/vendor/property.te
++++ b/sepolicy/vendor/property.te
+@@ -1,5 +1,3 @@
+ # Camera
+ vendor_internal_prop(vendor_camera_prop)
+ 
+-# GNSS
+-vendor_internal_prop(vendor_gnss_prop)
+diff --git a/sepolicy/vendor/property_contexts b/sepolicy/vendor/property_contexts
+index c14726ec98bfec8e9453d7d4ed5623cf4dddbd6d..e26d80861b3e57e2813b4013486e0708282c2746 100644
+--- a/sepolicy/vendor/property_contexts
++++ b/sepolicy/vendor/property_contexts
+@@ -11,6 +11,7 @@ dev.gnss.			u:object_r:vendor_gnss_prop:s0
+ persist.radio.multisim.config	u:object_r:vendor_radio_prop:s0
+ persist.ril.esim.slotswitch	u:object_r:vendor_radio_prop:s0
+ ril.clatd.			u:object_r:vendor_radio_prop:s0
++ro.multisim.			u:object_r:vendor_radio_prop:s0
+ 
+ # TEE
+ sys.mobicoredaemon.enable	u:object_r:tee_prop:s0
+diff --git a/sepolicy/vendor/secril_config_svc.te b/sepolicy/vendor/secril_config_svc.te
+index f422ba14f16af4bf6317511d46995fbd21c318c7..02ca80bac0b89eb405a6fd9e2be525260aab0f2a 100644
+--- a/sepolicy/vendor/secril_config_svc.te
++++ b/sepolicy/vendor/secril_config_svc.te
+@@ -3,6 +3,4 @@ r_dir_file(secril_config_svc, imei_efs_file);
+ allow secril_config_svc factoryprop_efs_file:file r_file_perms;
+ allow secril_config_svc simslot_count_file:file r_file_perms;
+ 
+-dontaudit secril_config_svc exported3_radio_prop:property_service set;
+-
+ set_prop(secril_config_svc, vendor_radio_prop);
+diff --git a/sepolicy/vendor/tee.te b/sepolicy/vendor/tee.te
+index f9a338e36986a85178d55d8b7a82dbcc66f858fe..7d4b7caff76024578f261aacbaa2794b1c6b7052 100644
+--- a/sepolicy/vendor/tee.te
++++ b/sepolicy/vendor/tee.te
+@@ -8,3 +8,6 @@ allow tee gatekeeper_efs_file:dir r_dir_perms;
+ allow tee gatekeeper_efs_file:file r_file_perms;
+ 
+ dontaudit tee system_prop:property_service set;
++
++allow tee dak_efs_file:dir r_dir_perms;
++allow tee dak_efs_file:file r_file_perms;
+diff --git a/shims/libcamera_metadata_helper/Android.bp b/shims/libcamera_metadata_helper/Android.bp
+index 6d1761c2e62f08dba437fd4b28ba95e02016e767..14ae5f36882de48f41b06dbcf2166c3ff67df854 100644
+--- a/shims/libcamera_metadata_helper/Android.bp
++++ b/shims/libcamera_metadata_helper/Android.bp
+@@ -4,6 +4,7 @@ cc_library_shared {
+     vendor: true,
+     defaults: ["hidl_defaults"],
+     srcs: [
++        "CameraFdsan.cpp",
+         "CameraMetadata.cpp",
+         "CameraParameters.cpp",
+     ],
+diff --git a/shims/libcamera_metadata_helper/CameraMetadata.cpp b/shims/libcamera_metadata_helper/CameraMetadata.cpp
+index 04bfbae4582082b9567d0f4f5f37cf89d36d6dd0..aa294ea6156ad200c9e402fcedac30d7397dc423 100644
+--- a/shims/libcamera_metadata_helper/CameraMetadata.cpp
++++ b/shims/libcamera_metadata_helper/CameraMetadata.cpp
+@@ -270,7 +270,7 @@ status_t CameraMetadata::update(uint32_t tag,
+         return res;
+     }
+     // string.size() doesn't count the null termination character.
+-    return updateImpl(tag, (const void*)string.string(), string.size() + 1);
++    return updateImpl(tag, (const void*)string.c_str(), string.size() + 1);
+ }
+ 
+ status_t CameraMetadata::update(const camera_metadata_ro_entry &entry) {
+diff --git a/shims/libcamera_metadata_helper/CameraParameters.cpp b/shims/libcamera_metadata_helper/CameraParameters.cpp
+index f46d217234680e428969f5801e6213a87f6b5031..4455abf16160cb9908b31888e5d65b3313573970 100644
+--- a/shims/libcamera_metadata_helper/CameraParameters.cpp
++++ b/shims/libcamera_metadata_helper/CameraParameters.cpp
+@@ -206,7 +206,7 @@ String8 CameraParameters::flatten() const
+ 
+ void CameraParameters::unflatten(const String8 &params)
+ {
+-    const char *a = params.string();
++    const char *a = params.c_str();
+     const char *b;
+ 
+     mMap.clear();
+@@ -272,7 +272,7 @@ const char *CameraParameters::get(const char *key) const
+     String8 v = mMap.valueFor(String8(key));
+     if (v.length() == 0)
+         return 0;
+-    return v.string();
++    return v.c_str();
+ }
+ 
+ int CameraParameters::getInt(const char *key) const
+@@ -464,7 +464,7 @@ void CameraParameters::dump() const
+         String8 k, v;
+         k = mMap.keyAt(i);
+         v = mMap.valueAt(i);
+-        ALOGD("%s: %s\n", k.string(), v.string());
++        ALOGD("%s: %s\n", k.c_str(), v.c_str());
+     }
+ }
+ 
+@@ -479,10 +479,10 @@ status_t CameraParameters::dump(int fd, const Vector<String16>& /*args*/) const
+         String8 k, v;
+         k = mMap.keyAt(i);
+         v = mMap.valueAt(i);
+-        snprintf(buffer, 255, "\t%s: %s\n", k.string(), v.string());
++        snprintf(buffer, 255, "\t%s: %s\n", k.c_str(), v.c_str());
+         result.append(buffer);
+     }
+-    write(fd, result.string(), result.size());
++    write(fd, result.c_str(), result.size());
+     return NO_ERROR;
+ }
+ 
+diff --git a/vendor.prop b/vendor.prop
+index 0037904c070054b9a2b9fdb4148ec93b45ef76d9..cb8971415ddd49c2d7a568215d1243c45563e81d 100644
+--- a/vendor.prop
++++ b/vendor.prop
+@@ -10,6 +10,7 @@ ro.camera.notify_nfc=1
+ 
+ # Display
+ ro.opengles.version=196610
++ro.hardware.egl=mali
+ debug.hwc.winupdate=1
+ debug.slsi.platform=1
+ debug.sf.disable_backpressure=1
+@@ -37,3 +38,20 @@ ro.security.cass.feature=1
+ ro.telephony.default_network=9,9
+ vendor.sec.rild.libpath=/vendor/lib64/libsec-ril.so
+ vendor.sec.rild.libpath2=/vendor/lib64/libsec-ril-dsds.so
++
++# Bluetooth: Android 15 needs the profile switches and a device class, or earphones cannot connect
++bluetooth.device.class_of_device=90,2,12
++bluetooth.profile.a2dp.source.enabled=true
++bluetooth.profile.avrcp.target.enabled=true
++bluetooth.profile.hfp.ag.enabled=true
++bluetooth.profile.hid.host.enabled=true
++bluetooth.profile.hid.device.enabled=true
++bluetooth.profile.pan.nap.enabled=true
++bluetooth.profile.pan.panu.enabled=true
++bluetooth.profile.pbap.server.enabled=true
++bluetooth.profile.map.server.enabled=true
++bluetooth.profile.opp.enabled=true
++bluetooth.profile.sap.server.enabled=true
++bluetooth.profile.gatt.enabled=true
++bluetooth.profile.bas.client.enabled=true
++bluetooth.profile.asha.central.enabled=true

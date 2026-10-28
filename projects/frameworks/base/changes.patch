@@ -1,0 +1,149 @@
+diff --git a/packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java b/packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java
+index 52c93f72206bb4626142efd5bab682097f299371..8c4fe0d297a9cb659ecc0a653e2743fb33bf0f44 100644
+--- a/packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java
++++ b/packages/SystemUI/src/com/android/keyguard/KeyguardSimPinViewController.java
+@@ -58,6 +58,8 @@ public class KeyguardSimPinViewController
+ 
+     private ProgressDialog mSimUnlockProgressDialog;
+     private CheckSimPin mCheckSimPinThread;
++    private boolean mRemainingAttemptsQueryInFlight;
++    private boolean mSimUnlockedSuccessfully;
+     private int mRemainingAttempts = -1;
+     // Below flag is set to true during power-up or when a new SIM card inserted on device.
+     // When this is true and when SIM card is PIN locked state, on PIN lock screen, message would
+@@ -190,12 +192,24 @@ public class KeyguardSimPinViewController
+                                 /* announce */
+                                 result.getResult() != PinResult.PIN_RESULT_TYPE_SUCCESS);
+                         if (result.getResult() == PinResult.PIN_RESULT_TYPE_SUCCESS) {
+-                            mKeyguardUpdateMonitor.reportSimUnlocked(mSubId);
++                            mSimUnlockedSuccessfully = true;
+                             mRemainingAttempts = -1;
+                             mShowDefaultMessage = true;
++                            // Set the three flags above BEFORE reportSimUnlocked(): that call
++                            // fires this same controller's own onSimStateChanged callback
++                            // synchronously, which calls showDefaultMessage() - and that check
++                            // reads mSimUnlockedSuccessfully. Setting the flag after the call
++                            // meant it read false during that synchronous re-entry, letting one
++                            // pointless blank-PIN attempts-remaining probe through every time
++                            // (DIAG root cause, 25 Oct).
++                            mKeyguardUpdateMonitor.reportSimUnlocked(mSubId);
+                             getKeyguardSecurityCallback().dismiss(
+                                     true, mSelectedUserInteractor.getSelectedUserId(),
+                                     SecurityMode.SimPin);
++                            // Leave mCheckSimPinThread set (not null) after success: the screen
++                            // is dismissing, and clearing it here let further taps queued while
++                            // this response was in flight re-submit the already-consumed PIN,
++                            // which the SIM then rejects as incorrect (DIAG root cause, 24 Oct).
+                         } else {
+                             mShowDefaultMessage = false;
+                             if (result.getResult() == PinResult.PIN_RESULT_TYPE_INCORRECT) {
+@@ -218,9 +232,9 @@ public class KeyguardSimPinViewController
+                             Log.d(LOG_TAG, "verifyPasswordAndUnlock "
+                                     + " CheckSimPin.onSimCheckResponse: " + result
+                                     + " attemptsRemaining=" + result.getAttemptsRemaining());
++                            mCheckSimPinThread = null;
+                         }
+                         getKeyguardSecurityCallback().userActivity();
+-                        mCheckSimPinThread = null;
+                     });
+                 }
+             };
+@@ -284,15 +298,18 @@ public class KeyguardSimPinViewController
+ 
+     private void showDefaultMessage() {
+         setLockedSimMessage();
+-        if (mRemainingAttempts >= 0) {
++        if (mRemainingAttempts >= 0 || mRemainingAttemptsQueryInFlight
++                || mSimUnlockedSuccessfully) {
+             return;
+         }
+ 
+         // Sending empty PIN here to query the number of remaining PIN attempts
++        mRemainingAttemptsQueryInFlight = true;
+         new CheckSimPin("", mSubId) {
+             void onSimCheckResponse(final PinResult result) {
+                 Log.d(LOG_TAG, "onSimCheckResponse " + " empty One result "
+                         + result.toString());
++                mRemainingAttemptsQueryInFlight = false;
+                 if (result.getAttemptsRemaining() >= 0) {
+                     mRemainingAttempts = result.getAttemptsRemaining();
+                     setLockedSimMessage();
+diff --git a/packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java b/packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java
+index 9adc5bae1adaeb4043ae67122890ac5de46633e6..dfefd47893bc8dc59bc6f8549a40520aed4a6501 100644
+--- a/packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java
++++ b/packages/SystemUI/src/com/android/keyguard/KeyguardSimPukViewController.java
+@@ -62,6 +62,7 @@ public class KeyguardSimPukViewController
+     private StateMachine mStateMachine = new StateMachine();
+     private int mSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+     private CheckSimPuk mCheckSimPukThread;
++    private boolean mSimUnlockedSuccessfully;
+     private ProgressDialog mSimUnlockProgressDialog;
+ 
+     KeyguardUpdateMonitorCallback mUpdateMonitorCallback = new KeyguardUpdateMonitorCallback() {
+@@ -199,6 +200,9 @@ public class KeyguardSimPukViewController
+     }
+ 
+     private void showDefaultMessage() {
++        if (mSimUnlockedSuccessfully) {
++            return;
++        }
+         if (mRemainingAttempts >= 0) {
+             mMessageAreaController.setMessage(mView.getPukPasswordErrorMessage(
+                     mRemainingAttempts, true,
+@@ -294,9 +298,17 @@ public class KeyguardSimPukViewController
+                                 /* announce */
+                                 result.getResult() != PinResult.PIN_RESULT_TYPE_SUCCESS);
+                         if (result.getResult() == PinResult.PIN_RESULT_TYPE_SUCCESS) {
+-                            mKeyguardUpdateMonitor.reportSimUnlocked(mSubId);
++                            mSimUnlockedSuccessfully = true;
+                             mRemainingAttempts = -1;
+                             mShowDefaultMessage = true;
++                            // Set the three flags above BEFORE reportSimUnlocked(): that call
++                            // fires this same controller's own onSimStateChanged callback
++                            // synchronously, which calls showDefaultMessage() - and that check
++                            // reads mSimUnlockedSuccessfully. Setting the flag after the call
++                            // meant it read false during that synchronous re-entry, letting one
++                            // pointless blank-PIN attempts-remaining probe through every time
++                            // (DIAG root cause, 25 Oct).
++                            mKeyguardUpdateMonitor.reportSimUnlocked(mSubId);
+ 
+                             getKeyguardSecurityCallback().dismiss(
+                                     true, mSelectedUserInteractor.getSelectedUserId(),
+@@ -329,9 +341,11 @@ public class KeyguardSimPukViewController
+                                         + " UpdateSim.onSimCheckResponse: "
+                                         + " attemptsRemaining=" + result.getAttemptsRemaining());
+                             }
++                            // Leave mCheckSimPukThread set (not null) after success: see the
++                            // matching comment/fix in KeyguardSimPinViewController (24 Oct DIAG).
++                            mCheckSimPukThread = null;
+                         }
+                         mStateMachine.reset();
+-                        mCheckSimPukThread = null;
+                     });
+                 }
+             };
+diff --git a/packages/SystemUI/src/com/android/systemui/bouncer/ui/viewmodel/PinBouncerViewModel.kt b/packages/SystemUI/src/com/android/systemui/bouncer/ui/viewmodel/PinBouncerViewModel.kt
+index 5baec1e025e88c55311fac241720e7448c007895..35d38295718281a74ef6e62bc5bd6dc685d83dd7 100644
+--- a/packages/SystemUI/src/com/android/systemui/bouncer/ui/viewmodel/PinBouncerViewModel.kt
++++ b/packages/SystemUI/src/com/android/systemui/bouncer/ui/viewmodel/PinBouncerViewModel.kt
+@@ -113,7 +113,6 @@ constructor(
+                             simBouncerInteractor.onErrorDialogDismissed()
+                         }
+                         is OnAuthenticateButtonClickedForSim -> {
+-                            isSimUnlockingDialogVisible.value = true
+                             simBouncerInteractor.verifySim(getInput())
+                             isSimUnlockingDialogVisible.value = false
+                             clearInput()
+@@ -209,6 +208,12 @@ constructor(
+     /** Notifies that the user clicked the "enter" button. */
+     fun onAuthenticateButtonClicked() {
+         if (authenticationMethod == AuthenticationMethodModel.Sim) {
++            // A SIM unlock request is already in flight for an earlier tap; ignore repeats
++            // until it completes, so a fast double-tap cannot resubmit the PIN twice.
++            if (isSimUnlockingDialogVisible.value) {
++                return
++            }
++            isSimUnlockingDialogVisible.value = true
+             requests.trySend(OnAuthenticateButtonClickedForSim)
+         } else {
+             tryAuthenticate(useAutoConfirm = false)

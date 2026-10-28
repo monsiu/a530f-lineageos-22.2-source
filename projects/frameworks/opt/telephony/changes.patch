@@ -1,0 +1,74 @@
+diff --git a/src/java/com/android/internal/telephony/cat/CatService.java b/src/java/com/android/internal/telephony/cat/CatService.java
+index 5fdb8cea105e9c682103b85fcb070fe7b3805a4d..d2a279f11ba93cd9920260ce89802f79b0f5b568 100644
+--- a/src/java/com/android/internal/telephony/cat/CatService.java
++++ b/src/java/com/android/internal/telephony/cat/CatService.java
+@@ -139,6 +139,7 @@ public class CatService extends Handler implements AppInterface {
+     protected static final int MSG_ID_ALPHA_NOTIFY   = 9;
+ 
+     static final int MSG_ID_RIL_MSG_DECODED          = 10;
++    static final int MSG_ID_RAW_SMS_SENT             = 11;
+ 
+     // Events to signal SIM presence or absent in the device.
+     private static final int MSG_ID_ICC_RECORDS_LOADED       = 20;
+@@ -499,7 +500,11 @@ public class CatService extends Handler implements AppInterface {
+                     if (((SendSMSParams) cmdParams).mDestAddress != null) {
+                         destAddr = ((SendSMSParams) cmdParams).mDestAddress.text;
+                     }
+-                    if (text != null && destAddr != null) {
++                    byte[] rawTpdu = ((SendSMSParams) cmdParams).mRawTpdu;
++                    if (rawTpdu != null && rawTpdu.length > 0) {
++                        mCmdIf.sendSMS(null, IccUtils.bytesToHexString(rawTpdu),
++                                obtainMessage(MSG_ID_RAW_SMS_SENT, cmdParams.mCmdDet));
++                    } else if (text != null && destAddr != null) {
+                         ProxyController proxyController = ProxyController
+                                 .getInstance(mContext, sFlags);
+                         SubscriptionManager subscriptionManager = (SubscriptionManager)
+@@ -1041,6 +1046,18 @@ public class CatService extends Handler implements AppInterface {
+         case MSG_ID_RESPONSE:
+             handleCmdResponse((CatResponseMessage) msg.obj);
+             break;
++        case MSG_ID_RAW_SMS_SENT:
++            AsyncResult smsAr = (AsyncResult) msg.obj;
++            CommandDetails smsCmdDet = (CommandDetails) smsAr.userObj;
++            if (smsAr.exception == null) {
++                CatLog.d(this, "STK raw SMS sent");
++                sendTerminalResponse(smsCmdDet, ResultCode.OK, false, 0, null);
++            } else {
++                CatLog.d(this, "STK raw SMS failed: " + smsAr.exception);
++                sendTerminalResponse(smsCmdDet, ResultCode.NETWORK_CRNTLY_UNABLE_TO_PROCESS,
++                        false, 0, null);
++            }
++            break;
+         case MSG_ID_ICC_CHANGED:
+             CatLog.d(this, "MSG_ID_ICC_CHANGED");
+             updateIccAvailability();
+diff --git a/src/java/com/android/internal/telephony/cat/CommandParamsFactory.java b/src/java/com/android/internal/telephony/cat/CommandParamsFactory.java
+index 8264f6e25edd698300cd5e0cdef5fcb2dcc81be6..9de3ab9d10ee1fb473d66ca21812fcc990083301 100644
+--- a/src/java/com/android/internal/telephony/cat/CommandParamsFactory.java
++++ b/src/java/com/android/internal/telephony/cat/CommandParamsFactory.java
+@@ -823,7 +823,12 @@ public class CommandParamsFactory extends Handler {
+             TextMessage destAddr = new TextMessage();
+             // Obtains the destination Address.
+             destAddr.text = smsMessage.getRecipientAddress();
+-            mCmdParams = new SendSMSParams(cmdDet, smsText, destAddr, displayTextParams);
++            SendSMSParams smsParams = new SendSMSParams(cmdDet, smsText, destAddr,
++                    displayTextParams);
++            smsParams.mRawTpdu = java.util.Arrays.copyOfRange(ctlvTpdu.getRawValue(),
++                    ctlvTpdu.getValueIndex(),
++                    ctlvTpdu.getValueIndex() + ctlvTpdu.getLength());
++            mCmdParams = smsParams;
+             return false;
+         }
+         return true;
+diff --git a/src/java/com/android/internal/telephony/cat/SendSMSParams.java b/src/java/com/android/internal/telephony/cat/SendSMSParams.java
+index f5108f04c8577e3a3701149e46e62a8f8899e832..3d4b1b6f54cbe60a3da22eb426ccd996e6582f80 100644
+--- a/src/java/com/android/internal/telephony/cat/SendSMSParams.java
++++ b/src/java/com/android/internal/telephony/cat/SendSMSParams.java
+@@ -21,6 +21,7 @@ class SendSMSParams extends CommandParams {
+     TextMessage mTextSmsMsg;
+     TextMessage mDestAddress;
+     DisplayTextParams mDisplayText;
++    byte[] mRawTpdu;
+ 
+     SendSMSParams(CommandDetails cmdDet, TextMessage textMsg, TextMessage destAddress,
+             DisplayTextParams displayText) {

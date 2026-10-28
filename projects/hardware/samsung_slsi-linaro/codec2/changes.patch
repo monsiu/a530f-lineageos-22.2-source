@@ -1,0 +1,1966 @@
+diff --git a/Android.bp b/Android.bp
+deleted file mode 100644
+index 240a4e74d1f2cb1b3a82385b8fee07f4117670d0..0000000000000000000000000000000000000000
+--- a/Android.bp
++++ /dev/null
+@@ -1,540 +0,0 @@
+-soong_namespace {
+-    imports: [
+-        "hardware/samsung_slsi-linaro/exynos",
+-        "hardware/samsung_slsi-linaro/graphics",
+-    ],
+-}
+-
+-package {
+-    default_applicable_licenses: ["hardware_samsung_slsi-linaro_codec2_license"],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_base_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-
+-    header_libs: [
+-        "libsystem_headers",
+-        "libcutils_headers",
+-        "device_kernel_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libsystem_headers",
+-        "libcutils_headers",
+-    ],
+-
+-    export_include_dirs: [
+-        "include",
+-        "include/api",
+-        "./",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynos_video_api_headers",
+-
+-    export_include_dirs: [
+-        "include/api",
+-    ],
+-}
+-
+-cc_defaults {
+-    name: "libexynos_video_api_defaults",
+-    visibility: ["//frameworks/av:__subpackages__"],
+-
+-    header_libs: [
+-        "//hardware/samsung_slsi-linaro/codec2:libexynos_video_api_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "//hardware/samsung_slsi-linaro/codec2:libexynos_video_api_headers",
+-    ],
+-
+-    cflags: ["-DUSE_EXYNOS_VIDEO_CONSTANTS"],
+-}
+-
+-subdirs = [
+-    "osal",
+-    "videocodec",
+-    "csc",
+-    "filter",
+-    "c2component",
+-    "services",
+-]
+-
+-cc_library_shared {
+-    name: "libExynosC2ComponentStore",
+-    proprietary: true,
+-    srcs: ["Exynos_C2_ComponentStore.cpp"],
+-    cflags: [
+-        "-fPIC",
+-        "-O3",
+-        "-Werror",
+-        "-Wall",
+-        "-Wno-deprecated-enum-enum-conversion",
+-        "-std=gnu++1z",
+-        "-std=c++2a",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynos_headers",
+-    ],
+-    shared_libs: [
+-        "liblog",
+-        "libcutils",
+-        "libion",
+-        "libhidlbase",
+-        "libcodec2",
+-        "libcodec2_vndk",
+-        "libsfplugin_ccodec_utils",
+-        "libstagefright_xmlparser",
+-        "libion",
+-        "libui",
+-        "libexynosgraphicbuffer",
+-    ],
+-    static_libs: ["libExynosC2OSAL"],
+-}
+-
+-cc_defaults {
+-    name: "libExynosC2_defaults",
+-    proprietary: true,
+-    srcs: [
+-        "c2component/Exynos_C2_Component.cpp",
+-        "c2component/Exynos_C2_IntfSetter.cpp",
+-        "c2component/Exynos_C2_FilterParamCnv.cpp",
+-        "filter/Exynos_Filter.cpp",
+-        "filter/codec/Exynos_CodecBase_Filter.cpp",
+-        "filter/csc/Exynos_CSC_Filter.cpp",
+-    ],
+-    cflags: [] + select(soong_config_variable("openmax", "USE_SW_CSC"), {
+-        "true": ["-DUSE_SW_CSC"],
+-        default: [],
+-    }),
+-    header_libs: [
+-        "libstagefright_foundation_headers",
+-        "libexynos_headers",
+-    ],
+-    static_libs: [
+-        "libExynosCSC",
+-        "libExynosVideoCodec",
+-        "libExynosC2OSAL",
+-        "libExynosVideoApi2",
+-        "libVendorVideoApi",
+-    ],
+-    shared_libs: [
+-        "liblog",
+-        "libutils",
+-        "libcutils",
+-        "libhidlbase",
+-        "libcodec2",
+-        "libcodec2_vndk",
+-        "libsfplugin_ccodec_utils",
+-        "libstagefright_foundation",
+-        "libstagefright_xmlparser",
+-        "libExynosC2ComponentStore",
+-        "libexynosv4l2",
+-        "libhardware",
+-        "libacryl",
+-        "libui",
+-        "libexynosgraphicbuffer",
+-        "libion_exynos",
+-    ],
+-}
+-
+-cc_defaults {
+-    name: "libExynosC2_enc_defaults",
+-    defaults: ["libExynosC2_defaults"],
+-    srcs: [
+-        "c2component/Exynos_C2_EncComponent.cpp",
+-        "filter/codec/Exynos_CodecEncBase_Filter.cpp",
+-    ],
+-    cflags: [] + select(soong_config_variable("openmax", "USE_FLEXIBLE_P010"), {
+-        "true": ["-DUSE_FLEXIBLE_P010"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_FULL_ST2094_40"), {
+-        "true": ["-DUSE_FULL_ST2094_40"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "GPU_TYPE"), {
+-        "sgpu": [
+-            "-DHW_GPU_ALIGN=256",
+-            "-DYV12_ALIGN=512",
+-        ],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_SUPPORT_GPU_SBWC"), {
+-        "true": ["-DUSE_SUPPORT_GPU_SBWC"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_SMALL_SECURE_MEMORY"), {
+-        "true": ["-DUSE_SMALL_SECURE_MEMORY"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "MAX_SECURE_RESOURCE"), {
+-        any @ flag_val: ["-DMAX_SECURE_RESOURCE=" + flag_val],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_CSC_FILTER"), {
+-        "true": ["-DUSE_CSC_FILTER"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "SUPPORT_MFC_ENC_RGB"), {
+-        "true": ["-DSUPPORT_MFC_ENC_RGB"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_BLOB_ALLOCATOR"), {
+-        "true": ["-DUSE_BLOB_ALLOCATOR"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_QUERY_HDR2SDR"), {
+-        "true": ["-DUSE_QUERY_HDR2SDR"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "UNSUPPORT_10BIT"), {
+-        "true": ["-DUNSUPPORT_10BIT"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_FILMGRAIN_FILTER"), {
+-        "true": ["-DUSE_FILMGRAIN_FILTER"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["-DUSE_GDC_FILTER"],
+-        default: [],
+-    }),
+-}
+-
+-cc_defaults {
+-    name: "libExynosC2_dec_defaults",
+-    defaults: ["libExynosC2_defaults"],
+-    srcs: [
+-        "c2component/Exynos_C2_DecComponent.cpp",
+-        "filter/codec/Exynos_CodecDecBase_Filter.cpp",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2H264Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/h264/Exynos_C2_H264DecComponent.cpp",
+-        "filter/codec/h264/Exynos_H264Dec_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_h264component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2H264Enc",
+-    defaults: ["libExynosC2_enc_defaults"],
+-
+-    srcs: [
+-        "c2component/h264/Exynos_C2_H264EncComponent.cpp",
+-        "filter/codec/h264/Exynos_H264Enc_Filter.cpp",
+-        "filter/codec/h264/Exynos_H264WFDEnc_Filter.cpp",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["filter/gdc/Exynos_GDC_Filter.cpp"],
+-        default: [],
+-    }),
+-
+-    header_libs: [
+-        "libexynosc2_h264component_headers",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosc2_gdcfilter_headers"],
+-        default: [],
+-    }),
+-    static_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libExynosGDCWrapper"],
+-        default: [],
+-    }),
+-    shared_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosgdc"],
+-        default: [],
+-    }),
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2HevcDec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/hevc/Exynos_C2_HevcDecComponent.cpp",
+-        "filter/codec/hevc/Exynos_HevcDec_Filter.cpp",
+-        "filter/postprocess/Exynos_External_Filter.cpp",
+-        "filter/postprocess/Exynos_HDR2SDR_Filter.cpp",
+-        "filter/postprocess/Exynos_PostControl_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_hevccomponent_headers",
+-        "libexynosc2_postprocessfilter_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2HevcEnc",
+-    defaults: ["libExynosC2_enc_defaults"],
+-
+-    srcs: [
+-        "c2component/hevc/Exynos_C2_HevcEncComponent.cpp",
+-        "filter/codec/hevc/Exynos_HevcEnc_Filter.cpp",
+-        "filter/codec/hevc/Exynos_HevcWFDEnc_Filter.cpp",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["filter/gdc/Exynos_GDC_Filter.cpp"],
+-        default: [],
+-    }),
+-
+-    header_libs: [
+-        "libexynosc2_hevccomponent_headers",
+-        "libexynosc2_postprocessfilter_headers",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosc2_gdcfilter_headers"],
+-        default: [],
+-    }),
+-    static_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libExynosGDCWrapper"],
+-        default: [],
+-    }),
+-    shared_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosgdc"],
+-        default: [],
+-    }),
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Mpeg4Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/mpeg4/Exynos_C2_Mpeg4DecComponent.cpp",
+-        "filter/codec/mpeg4/Exynos_Mpeg4Dec_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_mpeg4component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Mpeg4Enc",
+-    defaults: ["libExynosC2_enc_defaults"],
+-
+-    srcs: [
+-        "c2component/mpeg4/Exynos_C2_Mpeg4EncComponent.cpp",
+-        "filter/codec/mpeg4/Exynos_Mpeg4Enc_Filter.cpp",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["filter/gdc/Exynos_GDC_Filter.cpp"],
+-        default: [],
+-    }),
+-
+-    header_libs: [
+-        "libexynosc2_mpeg4component_headers",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosc2_gdcfilter_headers"],
+-        default: [],
+-    }),
+-    static_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libExynosGDCWrapper"],
+-        default: [],
+-    }),
+-    shared_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosgdc"],
+-        default: [],
+-    }),
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2H263Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/h263/Exynos_C2_H263DecComponent.cpp",
+-        "filter/codec/h263/Exynos_H263Dec_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_h263component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2H263Enc",
+-    defaults: ["libExynosC2_enc_defaults"],
+-
+-    srcs: [
+-        "c2component/h263/Exynos_C2_H263EncComponent.cpp",
+-        "filter/codec/h263/Exynos_H263Enc_Filter.cpp",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["filter/gdc/Exynos_GDC_Filter.cpp"],
+-        default: [],
+-    }),
+-    header_libs: [
+-        "libexynosc2_h263component_headers",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosc2_gdcfilter_headers"],
+-        default: [],
+-    }),
+-    static_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libExynosGDCWrapper"],
+-        default: [],
+-    }),
+-    shared_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosgdc"],
+-        default: [],
+-    }),
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Vp8Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/vp8/Exynos_C2_Vp8DecComponent.cpp",
+-        "filter/codec/vp8/Exynos_Vp8Dec_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_vp8component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Vp8Enc",
+-    defaults: ["libExynosC2_enc_defaults"],
+-
+-    srcs: [
+-        "c2component/vp8/Exynos_C2_Vp8EncComponent.cpp",
+-        "filter/codec/vp8/Exynos_Vp8Enc_Filter.cpp",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["filter/gdc/Exynos_GDC_Filter.cpp"],
+-        default: [],
+-    }),
+-    header_libs: [
+-        "libexynosc2_vp8component_headers",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosc2_gdcfilter_headers"],
+-        default: [],
+-    }),
+-    static_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libExynosGDCWrapper"],
+-        default: [],
+-    }),
+-    shared_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosgdc"],
+-        default: [],
+-    }),
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Vp9Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/vp9/Exynos_C2_Vp9DecComponent.cpp",
+-        "filter/codec/vp9/Exynos_Vp9Dec_Filter.cpp",
+-        "filter/postprocess/Exynos_External_Filter.cpp",
+-        "filter/postprocess/Exynos_HDR2SDR_Filter.cpp",
+-        "filter/postprocess/Exynos_PostControl_Filter.cpp",
+-    ],
+-    local_include_dirs: ["filter/postprocess"],
+-    header_libs: [
+-        "libexynosc2_vp9component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Vp9Enc",
+-    defaults: ["libExynosC2_enc_defaults"],
+-
+-    srcs: [
+-        "c2component/vp9/Exynos_C2_Vp9EncComponent.cpp",
+-        "filter/codec/vp9/Exynos_Vp9Enc_Filter.cpp",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["filter/gdc/Exynos_GDC_Filter.cpp"],
+-        default: [],
+-    }),
+-    header_libs: [
+-        "libexynosc2_vp9component_headers",
+-    ] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosc2_gdcfilter_headers"],
+-        default: [],
+-    }),
+-    static_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libExynosGDCWrapper"],
+-        default: [],
+-    }),
+-    shared_libs: [] + select(soong_config_variable("openmax", "USE_GDC"), {
+-        "true": ["libexynosgdc"],
+-        default: [],
+-    }),
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Mpeg2Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/mpeg2/Exynos_C2_Mpeg2DecComponent.cpp",
+-        "filter/codec/mpeg2/Exynos_Mpeg2Dec_Filter.cpp",
+-    ],
+-    header_libs: [
+-        "libexynosc2_mpeg2component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Vc1Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/vc1/Exynos_C2_Vc1DecComponent.cpp",
+-        "filter/codec/vc1/Exynos_Vc1Dec_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_vc1component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2WmvDec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/vc1/Exynos_C2_Vc1DecComponent.cpp",
+-        "filter/codec/vc1/Exynos_Vc1Dec_Filter.cpp",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_vc1component_headers",
+-    ],
+-}
+-
+-cc_library_shared {
+-    name: "libExynosC2Av1Dec",
+-    defaults: ["libExynosC2_dec_defaults"],
+-
+-    srcs: [
+-        "c2component/av1/Exynos_C2_Av1DecComponent.cpp",
+-        "filter/codec/av1/Exynos_Av1Dec_Filter.cpp",
+-        "filter/postprocess/Exynos_External_Filter.cpp",
+-        "filter/postprocess/Exynos_FilmGrain_Filter.cpp",
+-        "filter/postprocess/Exynos_HDR2SDR_Filter.cpp",
+-        "filter/postprocess/Exynos_PostControl_Filter.cpp",
+-    ],
+-
+-    local_include_dirs: [
+-        "filter/postprocess",
+-        "filter/codec/av1",
+-    ],
+-
+-    header_libs: [
+-        "libexynosc2_vc1component_headers",
+-    ],
+-}
+\ No newline at end of file
+diff --git a/c2component/Android.bp b/c2component/Android.bp
+deleted file mode 100644
+index 47a6356b8be5e0afc272821fd99dc5c7f7cc3ae5..0000000000000000000000000000000000000000
+--- a/c2component/Android.bp
++++ /dev/null
+@@ -1,51 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynosc2_codecfilter_headers",
+-        "libexynosc2_cscfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynosc2_codecfilter_headers",
+-        "libexynosc2_cscfilter_headers",
+-    ],
+-}
+-
+-subdirs = [
+-    "h264",
+-    "hevc",
+-    "mp4",
+-    "h263",
+-    "vp8",
+-    "vp9",
+-    "mpeg2",
+-    "vc1",
+-    "av1",
+-]
+diff --git a/c2component/av1/Android.bp b/c2component/av1/Android.bp
+deleted file mode 100644
+index ded0bda79ddf30210b4f120bdbe92d38f81e7155..0000000000000000000000000000000000000000
+--- a/c2component/av1/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_av1_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_av1_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_av1component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_av1filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_av1filter_headers",
+-    ],
+-}
+diff --git a/c2component/h263/Android.bp b/c2component/h263/Android.bp
+deleted file mode 100644
+index 27f82788838aa2bb4266df6038186b1d61faf953..0000000000000000000000000000000000000000
+--- a/c2component/h263/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_h263_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_h263_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_h263component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_h263filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_h263filter_headers",
+-    ],
+-}
+diff --git a/c2component/h264/Android.bp b/c2component/h264/Android.bp
+deleted file mode 100644
+index dae93917195e4ef112066dc3a658fd43f349ed1f..0000000000000000000000000000000000000000
+--- a/c2component/h264/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_h264_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_h264_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_h264component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_h264filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_h264filter_headers",
+-    ],
+-}
+diff --git a/c2component/hevc/Android.bp b/c2component/hevc/Android.bp
+deleted file mode 100644
+index d0daa327361e7ec42488ddd99c12b962a3abeb67..0000000000000000000000000000000000000000
+--- a/c2component/hevc/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_hevc_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_hevc_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_hevccomponent_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_hevcfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_hevcfilter_headers",
+-    ],
+-}
+diff --git a/c2component/mpeg2/Android.bp b/c2component/mpeg2/Android.bp
+deleted file mode 100644
+index 9c7a0e002ac058dcd74331360d29c523f3efd2f1..0000000000000000000000000000000000000000
+--- a/c2component/mpeg2/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_mpeg2_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_mpeg2_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_mpeg2component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_mpeg2filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_mpeg2filter_headers",
+-    ],
+-}
+diff --git a/c2component/mpeg4/Android.bp b/c2component/mpeg4/Android.bp
+deleted file mode 100644
+index d733f227520fccec38f22ffb99965aaca6eeae3b..0000000000000000000000000000000000000000
+--- a/c2component/mpeg4/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_mpeg4_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_mpeg4_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_mpeg4component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_mpeg4filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_mpeg4filter_headers",
+-    ],
+-}
+diff --git a/c2component/vc1/Android.bp b/c2component/vc1/Android.bp
+deleted file mode 100644
+index 480161cdf312864f2533ae38a26f5ae6743c9491..0000000000000000000000000000000000000000
+--- a/c2component/vc1/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_vc1_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_vc1_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_vc1component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_vc1filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_vc1filter_headers",
+-    ],
+-}
+diff --git a/c2component/vp8/Android.bp b/c2component/vp8/Android.bp
+deleted file mode 100644
+index b7ae6be959980211ba8fd36d8c4a7849c6a22ee5..0000000000000000000000000000000000000000
+--- a/c2component/vp8/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_vp8_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_vp8_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_vp8component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_vp8filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_vp8filter_headers",
+-    ],
+-}
+diff --git a/c2component/vp9/Android.bp b/c2component/vp9/Android.bp
+deleted file mode 100644
+index 3a7245afe1d7094f2441c052d5cf8f48502e5788..0000000000000000000000000000000000000000
+--- a/c2component/vp9/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_c2component_vp9_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_c2component_vp9_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_vp9component_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_vp9filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_component_headers",
+-        "libexynosc2_vp9filter_headers",
+-    ],
+-}
+diff --git a/csc/Android.bp b/csc/Android.bp
+deleted file mode 100644
+index fe03227ca979b4d48f36d823639adafcdd68e6b7..0000000000000000000000000000000000000000
+--- a/csc/Android.bp
++++ /dev/null
+@@ -1,67 +0,0 @@
+-package {
+-    default_applicable_licenses: ["hardware_samsung_slsi-linaro_codec2_csc_license"],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_csc_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_csc_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-    ],
+-}
+-
+-cc_library_static {
+-    name: "libExynosCSC",
+-    proprietary: true,
+-    cflags: [
+-        "-fPIC",
+-        "-O3",
+-        "-Werror",
+-        "-Wall",
+-        "-std=gnu++1z",
+-        "-std=c++2a",
+-    ],
+-    header_libs: [
+-        "libexynosc2_csc_headers",
+-        "libexynos_headers",
+-    ],
+-    static_libs: [
+-        "libExynosC2OSAL",
+-    ],
+-    shared_libs: [
+-        "libacryl",
+-        "libcutils",
+-        "libutils",
+-        "libhardware",
+-        "libhidlbase",
+-        "libexynosv4l2",
+-        "libion_exynos",
+-        "libui",
+-        "libexynosgraphicbuffer",
+-    ],
+-    srcs: [
+-        "ExynosCSC.cpp",
+-    ],
+-}
+diff --git a/filter/Android.bp b/filter/Android.bp
+deleted file mode 100644
+index 12f951f1c16d4b3fe2c7950893e3ab2af7e8397c..0000000000000000000000000000000000000000
+--- a/filter/Android.bp
++++ /dev/null
+@@ -1,40 +0,0 @@
+-package {
+-    default_applicable_licenses: ["hardware_samsung_slsi-linaro_codec2_filter_license"],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-    ],
+-}
+-
+-subdirs = [
+-    "codec",
+-    "csc",
+-    "postprocess",
+-    "gdc",
+-]
+diff --git a/filter/codec/Android.bp b/filter/codec/Android.bp
+deleted file mode 100644
+index 664a208438b1b98a0040f28bdd28cfa9fb799efe..0000000000000000000000000000000000000000
+--- a/filter/codec/Android.bp
++++ /dev/null
+@@ -1,47 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_codecfilter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_filter_headers",
+-        "libexynosc2_videocodec_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_filter_headers",
+-        "libexynosc2_videocodec_headers",
+-    ],
+-}
+-
+-subdirs = [
+-    "h264",
+-    "hevc",
+-    "mpeg4",
+-    "h263",
+-    "vp8",
+-    "vp9",
+-    "mpeg2",
+-    "vc1",
+-    "av1",
+-]
+diff --git a/filter/codec/av1/Android.bp b/filter/codec/av1/Android.bp
+deleted file mode 100644
+index fc674aecbec9ca4c9f3ea658edf0ad839b694df5..0000000000000000000000000000000000000000
+--- a/filter/codec/av1/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_av1_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_av1_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_av1filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/h263/Android.bp b/filter/codec/h263/Android.bp
+deleted file mode 100644
+index d6e359ebe41f66512fcb1fb9ceb63c75efc4989b..0000000000000000000000000000000000000000
+--- a/filter/codec/h263/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_h263_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_h263_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_h263filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/h264/Android.bp b/filter/codec/h264/Android.bp
+deleted file mode 100644
+index 82aa45c4e9c047ffbe99dc682fcdff20fc020418..0000000000000000000000000000000000000000
+--- a/filter/codec/h264/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_h264_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_h264_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_h264filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/hevc/Android.bp b/filter/codec/hevc/Android.bp
+deleted file mode 100644
+index 7f6480d95bd661cc37dc68ebefbd874c64096483..0000000000000000000000000000000000000000
+--- a/filter/codec/hevc/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_hevc_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_hevc_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_hevcfilter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/mpeg2/Android.bp b/filter/codec/mpeg2/Android.bp
+deleted file mode 100644
+index a032b028e81e402903a57f574cbf63659fccdeaf..0000000000000000000000000000000000000000
+--- a/filter/codec/mpeg2/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_mpeg2_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_mpeg2_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_mpeg2filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/mpeg4/Android.bp b/filter/codec/mpeg4/Android.bp
+deleted file mode 100644
+index 22e18f5e8cce535100ed2cbdf6fbd1c7ed4f2440..0000000000000000000000000000000000000000
+--- a/filter/codec/mpeg4/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_mpeg4_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_mpeg4_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_mpeg4filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/vc1/Android.bp b/filter/codec/vc1/Android.bp
+deleted file mode 100644
+index bc10cad46d6afe0deb8f992d895dbb05e38e479f..0000000000000000000000000000000000000000
+--- a/filter/codec/vc1/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_vc1_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_vc1_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_vc1filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/vp8/Android.bp b/filter/codec/vp8/Android.bp
+deleted file mode 100644
+index 660b4959616f90f4e69f7fbe6e4815f518580ab3..0000000000000000000000000000000000000000
+--- a/filter/codec/vp8/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_vp8_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_vp8_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_vp8filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/codec/vp9/Android.bp b/filter/codec/vp9/Android.bp
+deleted file mode 100644
+index 2956969502c22d4deff69d15b444899fc18d72de..0000000000000000000000000000000000000000
+--- a/filter/codec/vp9/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_codec_vp9_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_codec_vp9_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_vp9filter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_codecfilter_headers",
+-    ],
+-}
+diff --git a/filter/csc/Android.bp b/filter/csc/Android.bp
+deleted file mode 100644
+index a6833f0affd9b2cbfea71ab83a5ce2a4ceb7eb22..0000000000000000000000000000000000000000
+--- a/filter/csc/Android.bp
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_csc_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_csc_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_cscfilter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_filter_headers",
+-        "libexynosc2_csc_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_filter_headers",
+-        "libexynosc2_csc_headers",
+-    ],
+-}
+diff --git a/filter/postprocess/Android.bp b/filter/postprocess/Android.bp
+deleted file mode 100644
+index e3003972c44168f9a5a9cec8aeacf4dc0cd1ecb1..0000000000000000000000000000000000000000
+--- a/filter/postprocess/Android.bp
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_filter_postprocess_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_filter_postprocess_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_postprocessfilter_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-    ],
+-    header_libs: [
+-        "libexynosc2_filter_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_filter_headers",
+-    ],
+-}
+diff --git a/osal/Android.bp b/osal/Android.bp
+deleted file mode 100644
+index 1417e6d3a79bf312a02d38a51362a4b840f3ae09..0000000000000000000000000000000000000000
+--- a/osal/Android.bp
++++ /dev/null
+@@ -1,69 +0,0 @@
+-package {
+-    default_applicable_licenses: ["hardware_samsung_slsi-linaro_codec2_osal_license"],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_osal_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_osal_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: ["./"],
+-    header_libs: [
+-        "media_plugin_headers",
+-        "libexynosc2_base_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "media_plugin_headers",
+-        "libexynosc2_base_headers",
+-    ],
+-}
+-
+-cc_library_static {
+-    name: "libExynosC2OSAL",
+-    proprietary: true,
+-    cflags: [
+-        "-fPIC",
+-        "-O3",
+-        "-Werror",
+-        "-Wall",
+-        "-std=gnu++1z",
+-        "-std=c++2a",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynos_headers",
+-    ],
+-    shared_libs: [
+-        "liblog",
+-        "libutils",
+-        "libcutils",
+-        "libcodec2",
+-        "libcodec2_vndk",
+-        "libhidlbase",
+-        "libstagefright_foundation_defaults",
+-        "libion",
+-        "libion_exynos",
+-        "libui",
+-        "libexynosgraphicbuffer",
+-    ],
+-    srcs: [
+-        "ExynosBufferAllocator.cpp",
+-        "ExynosETC.cpp",
+-        "ExynosLog.cpp",
+-        "ExynosIONUtils.cpp",
+-        "ExynosBufferManager.cpp",
+-    ],
+-}
+diff --git a/plugin/Android.bp b/plugin/Android.bp
+deleted file mode 100644
+index 325200d2909f52add540b6b4a6950fcd43e01e48..0000000000000000000000000000000000000000
+--- a/plugin/Android.bp
++++ /dev/null
+@@ -1,43 +0,0 @@
+-
+-cc_library_shared {
+-    name: "libc2filterplugin",
+-    proprietary: true,
+-    cflags: [
+-        "-fPIC",
+-        "-O3",
+-        "-Werror",
+-        "-Wall",
+-        "-Wno-deprecated-enum-enum-conversion",
+-        "-std=gnu++1z",
+-        "-std=c++2a",
+-    ],
+-    header_libs: [
+-        "libcodec2_hidl_plugin_headers",
+-        "libgui_headers",
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynos_headers",
+-    ],
+-    static_libs: [
+-        "librenderfright",
+-        "libExynosC2OSAL",
+-    ],
+-    shared_libs: [
+-        "libbase",
+-        "liblog",
+-        "libcodec2",
+-        "libcodec2_vndk",
+-        "libutils",
+-        "libcutils",
+-        "libion",
+-        "libEGL",
+-        "libGLESv1_CM",
+-        "libGLESv2",
+-        "libGLESv3",
+-        "libprocessgroup",
+-        "libsfplugin_ccodec_utils",
+-        "libsync",
+-        "libui",
+-    ],
+-    srcs: ["Exynos_C2_FilterPlugin.cpp"],
+-}
+diff --git a/services/Android.bp b/services/Android.bp
+deleted file mode 100644
+index 61c6d012e217d42c218f3904a5ec243d4176088d..0000000000000000000000000000000000000000
+--- a/services/Android.bp
++++ /dev/null
+@@ -1,77 +0,0 @@
+-prebuilt_etc {
+-    name: "codec2.vendor.base.policy",
+-    vendor: true,
+-    sub_dir: "seccomp_policy",
+-
+-    src: "seccomp_policy/codec2.vendor.base-arm.policy",
+-
+-    required: ["crash_dump.policy"],
+-}
+-
+-prebuilt_etc {
+-    name: "codec2.vendor.ext.policy",
+-    vendor: true,
+-    sub_dir: "seccomp_policy",
+-
+-    src: "seccomp_policy/codec2.vendor.ext-arm.policy",
+-
+-    required: ["crash_dump.policy"],
+-}
+-
+-cc_defaults {
+-    name: "codec_defaults",
+-    vendor: true,
+-    relative_install_path: "hw",
+-    cflags: [
+-        "-Werror",
+-        "-Wall",
+-        "-Wno-unused-parameter",
+-    ],
+-    srcs: ["vendor.cpp"],
+-    include_dirs: [
+-        "frameworks/av/media/libstagefright/include",
+-        "frameworks/native/include",
+-        "frameworks/av/media/codec2/vndk/include",
+-    ],
+-    shared_libs: [
+-        "android.hardware.media.omx@1.0",
+-        "libavservices_minijail",
+-        "libbinder",
+-        "libcodec2_vndk",
+-        "libhidlbase",
+-        "liblog",
+-        "libstagefright_omx",
+-        "libstagefright_xmlparser",
+-        "libutils",
+-        "libExynosC2ComponentStore",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "media_plugin_headers",
+-        "libexynos_headers",
+-    ]
+-}
+-
+-cc_binary {
+-    name: "samsung.hardware.media.c2@1.0-service",
+-    defaults: ["codec_defaults"],
+-    init_rc: ["samsung.hardware.media.c2@1.0-service.rc"],
+-    include_dirs: ["frameworks/av/media/codec2/hal/hidl/1.0/utils/include"],
+-    shared_libs: [
+-        "android.hardware.media.c2@1.0",
+-        "libcodec2_hidl@1.0",
+-    ],
+-}
+-
+-cc_binary {
+-    name: "samsung.hardware.media.c2@1.2-service",
+-    defaults: ["codec_defaults"],
+-    init_rc: ["samsung.hardware.media.c2@1.2-service.rc"],
+-    cflags: ["-DUSE_CODEC2_HIDL_1_2"],
+-    include_dirs: ["frameworks/av/media/codec2/hal/hidl/1.2/utils/include"],
+-    shared_libs: [
+-        "android.hardware.media.c2@1.2",
+-        "libcodec2_hidl@1.2",
+-    ],
+-}
+\ No newline at end of file
+diff --git a/videocodec/Android.bp b/videocodec/Android.bp
+deleted file mode 100644
+index 02c950ca0528595ce4e68212f631c7ef32149aaf..0000000000000000000000000000000000000000
+--- a/videocodec/Android.bp
++++ /dev/null
+@@ -1,80 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_videocodec_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_videocodec_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynosc2_videocodec_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: ["./"],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynos_videoapi_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-        "libexynos_videoapi_headers",
+-    ],
+-}
+-
+-subdirs = [
+-    "libExynosVideoApi",
+-]
+-
+-cc_library_static {
+-    name: "libExynosVideoCodec",
+-    proprietary: true,
+-    cflags: [
+-        "-fPIC",
+-        "-O3",
+-        "-Werror",
+-        "-Wall",
+-        "-std=gnu++1z",
+-        "-std=c++2a",
+-    ] + select(soong_config_variable("openmax", "USE_DEC_SW_CSC"), {
+-        "true": ["-DUSE_DEC_SW_CSC"],
+-        default: [],
+-    }),
+-    header_libs: [
+-        "libexynosc2_videocodec_headers",
+-        "libexynosc2_codecfilter_headers",
+-        "libexynos_headers",
+-    ],
+-    static_libs: [
+-        "libExynosC2OSAL",
+-        "libExynosVideoApi2",
+-    ],
+-    shared_libs: [
+-        "libcutils",
+-        "libhardware",
+-        "libhidlbase",
+-        "libexynosv4l2",
+-        "libion_exynos",
+-        "libui",
+-        "libexynosgraphicbuffer",
+-    ],
+-    srcs: [
+-        "ExynosVideoCodec.cpp",
+-        "ExynosVideoCodecBase.cpp",
+-        "ExynosVideoCodecCommon.cpp",
+-        "ExynosVideoCodecDec.cpp",
+-        "ExynosVideoCodecEnc.cpp",
+-    ],
+-}
+diff --git a/videocodec/libExynosVideoApi/Android.bp b/videocodec/libExynosVideoApi/Android.bp
+deleted file mode 100644
+index 613edf3aa11cdd4761b835a77ddb5d50d5fb21ae..0000000000000000000000000000000000000000
+--- a/videocodec/libExynosVideoApi/Android.bp
++++ /dev/null
+@@ -1,90 +0,0 @@
+-package {
+-    default_applicable_licenses: [
+-        "hardware_samsung_slsi-linaro_codec2_videocodec_libExynosVideoApi_license",
+-    ],
+-}
+-
+-// Added automatically by a large-scale-change
+-// See: http://go/android-license-faq
+-license {
+-    name: "hardware_samsung_slsi-linaro_codec2_videocodec_libExynosVideoApi_license",
+-    visibility: [":__subpackages__"],
+-    license_kinds: [
+-        "SPDX-license-identifier-Apache-2.0",
+-    ],
+-    license_text: [
+-        "NOTICE",
+-    ],
+-}
+-
+-cc_library_headers {
+-    name: "libexynos_videoapi_headers",
+-    proprietary: true,
+-    compile_multilib: "both",
+-    export_include_dirs: [
+-        "./",
+-        "include",
+-        "common",
+-        "mfc_headers",
+-        "osal/include",
+-    ],
+-    header_libs: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-    ],
+-    export_header_lib_headers: [
+-        "libexynosc2_base_headers",
+-        "libexynosc2_osal_headers",
+-    ],
+-}
+-
+-cc_library_static {
+-    name: "libExynosVideoApi2",
+-    proprietary: true,
+-
+-    cflags: [
+-
+-        "-Wno-unused-variable",
+-        "-Wno-unused-label",
+-        "-Wno-unused-function",
+-        "-DUSE_ANDROID",
+-        "-DUSE_USER_POLL_EVENT",
+-    ] + select(soong_config_variable("openmax", "MAINLINE_FEATURE_IN_SINCE_4_19"), {
+-        "true": ["-DMAINLINE_FEATURE_IN_SINCE_4_19"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_HEVC_HWIP"), {
+-        "true": ["-DUSE_HEVC_HWIP"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "USE_SINGLE_PALNE_SUPPORT"), {
+-        "true": ["-DUSE_SINGLE_PALNE_SUPPORT"],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "FRAMERATE_THRESH_HOLD"), {
+-        any @ flag_val: ["-DFRAMERATE_THRESH_HOLD=" + flag_val],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "SUPPORT_GPU_SBWC"), {
+-        "true": ["-DUSE_SUPPORT_GPU_SBWC="],
+-        default: [],
+-    }) + select(soong_config_variable("openmax", "use_epoll"), {
+-        "false": [],
+-        default: ["-DUSE_EPOLL"],
+-    }),
+-
+-    header_libs: [
+-        "device_kernel_headers",
+-        "libexynos_videoapi_headers",
+-        "libexynos_headers",
+-    ],
+-
+-    shared_libs: [
+-        "libion_exynos",
+-        "liblog",
+-    ],
+-
+-    srcs: [
+-        "ExynosVideoInterface.c",
+-        "common/ExynosVideoCommonApi.c",
+-        "osal/ExynosVideo_OSAL.c",
+-        "dec/ExynosVideoDecoder.c",
+-        "enc/ExynosVideoEncoder.c",
+-    ],
+-}

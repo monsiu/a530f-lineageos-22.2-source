@@ -1,0 +1,205 @@
+﻿{
+    "path":  "device/samsung/exynos7885-common",
+    "head":  "1b0e8ced1860abed0810d853a60215f111048d05",
+    "tracked_changes":  33,
+    "untracked_files":  4,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "BoardConfigCommon.mk"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "configs/init/init.recovery.exynos7884.rc"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "configs/init/init.samsung.rc"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "configs/power/powerhint_exynos7885.json"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "exynos7885.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "framework_compatibility_matrix.xml"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "init/Android.bp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "manifest.xml"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "overlay/frameworks/base/core/res/res/values/config.xml"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "product.prop"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "proprietary-files.txt"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "recovery/Android.bp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/device.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/file.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/file_contexts"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/genfs_contexts"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/gpsd.te"
+                    },
+                    {
+                        "status":  "D ",
+                        "path":  "sepolicy/vendor/hal_drm_clearkey.te"
+                    },
+                    {
+                        "status":  "D ",
+                        "path":  "sepolicy/vendor/hal_drm_widevine.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/hal_gatekeeper_default.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/hal_gnss_default.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/hal_keymaster_default.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/hal_power_default.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/hwservice_contexts"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/init.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/property.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/property_contexts"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/secril_config_svc.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sepolicy/vendor/tee.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "shims/libcamera_metadata_helper/Android.bp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "shims/libcamera_metadata_helper/CameraMetadata.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "shims/libcamera_metadata_helper/CameraParameters.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "vendor.prop"
+                    }
+                ],
+    "untracked":  [
+                      {
+                          "path":  "sensors/Android.bp",
+                          "sha256":  "075fca52ee69382d8958957063e074a729a79f510554bb92780db2bc149bed36",
+                          "mode":  511
+                      },
+                      {
+                          "path":  "sensors/SensorsSubHal.cpp",
+                          "sha256":  "5892a336c52062d23ed85ca557aa747ca144f9d13b6ff56ac0132c4bbaa8308e",
+                          "mode":  511
+                      },
+                      {
+                          "path":  "sensors/hals.conf",
+                          "sha256":  "91ab22e393306bdc012f123a7fe9f24a0919120136b8ba6b6aff7360909ccd2e",
+                          "mode":  511
+                      },
+                      {
+                          "path":  "shims/libcamera_metadata_helper/CameraFdsan.cpp",
+                          "sha256":  "1a756c2aba7ad551edff2b206b90dbdd234ace8ea3de652efd1d80ba0495e49a",
+                          "mode":  420
+                      }
+                  ],
+    "excluded_untracked":  [
+                               {
+                                   "path":  "configs/init/init.recovery.exynos7884.rc.bisect2-backup",
+                                   "sha256":  "c683976696f6b8f9a2e7fe697f9aa471e3824101d456a8247629c919a3ee8639",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "configs/init/init.recovery.exynos7884.rc.confone-tested-backup",
+                                   "sha256":  "c683976696f6b8f9a2e7fe697f9aa471e3824101d456a8247629c919a3ee8639",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "configs/init/init.recovery.exynos7884.rc.take2-failed-backup",
+                                   "sha256":  "e4687d9af0cd478d26f4c806d2ed9003ac0d69a126e2d0565af0c7c6507c0fe1",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "configs/init/init.recovery.exynos7884.rc.take3-hung-backup",
+                                   "sha256":  "8449bac2c5cf3eb733a9fc2a1c2d5438735b00f6fe2553ffc486fa60a20d2f20",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "configs/init/init.recovery.exynos7884.rc.take5-pending-backup",
+                                   "sha256":  "2222a171acdf9bec1a0f8cabb416d01ff3e003156c74c1a7b9dbb7a867360f2e",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               },
+                               {
+                                   "path":  "configs/init/init.recovery.exynos7884.rc.tmp",
+                                   "sha256":  "290db65b946794f1fb48aef293d033b5a2e7ceff9ea90c7d270b792ea60928cf",
+                                   "mode":  420,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               }
+                           ],
+    "patch_bytes":  43831,
+    "remotes":  [
+                    "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_exynos7885-common (fetch)",
+                    "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_exynos7885-common (push)"
+                ]
+}

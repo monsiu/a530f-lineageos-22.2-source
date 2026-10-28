@@ -1,0 +1,31 @@
+﻿{
+    "path":  "frameworks/opt/telephony",
+    "head":  "eff3e8c7414bbec4cbedf14a6cd7009e0710d1e7",
+    "tracked_changes":  3,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "src/java/com/android/internal/telephony/cat/CatService.java"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "src/java/com/android/internal/telephony/cat/CommandParamsFactory.java"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "src/java/com/android/internal/telephony/cat/SendSMSParams.java"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  4492,
+    "remotes":  [
+                    "github\thttps://github.com/LineageOS/android_frameworks_opt_telephony (fetch)",
+                    "github\thttps://github.com/LineageOS/android_frameworks_opt_telephony (push)"
+                ]
+}

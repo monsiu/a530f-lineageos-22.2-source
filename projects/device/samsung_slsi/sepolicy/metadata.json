@@ -1,0 +1,27 @@
+﻿{
+    "path":  "device/samsung_slsi/sepolicy",
+    "head":  "3083bb75a50325dd77f07f46a59efd87b839f487",
+    "tracked_changes":  2,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "common/vendor/gpsd.te"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "common/vendor/hal_drm_widevine.te"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  1374,
+    "remotes":  [
+                    "github\thttps://github.com/LineageOS/android_device_samsung_slsi_sepolicy (fetch)",
+                    "github\thttps://github.com/LineageOS/android_device_samsung_slsi_sepolicy (push)"
+                ]
+}

@@ -1,0 +1,4 @@
+diff --git a/SbwcDecompService/1.0/default/Android.bp b/SbwcDecompService/1.0/default/Android.bp.disabled
+similarity index 100%
+rename from SbwcDecompService/1.0/default/Android.bp
+rename to SbwcDecompService/1.0/default/Android.bp.disabled

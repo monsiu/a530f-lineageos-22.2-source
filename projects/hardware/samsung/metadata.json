@@ -1,0 +1,95 @@
+﻿{
+    "path":  "hardware/samsung",
+    "head":  "082709ec235fd60f55bff0fb0deb8eae12bf0622",
+    "tracked_changes":  19,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  "D ",
+                        "path":  "aidl/power-libperfmgr/Android.bp"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "aidl/power-libperfmgr/Android.bp.disabled"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "hidl/fingerprint/inscreen/Android.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "hidl/fingerprint/inscreen/Android.mk.disabled"
+                    },
+                    {
+                        "status":  "D ",
+                        "path":  "hidl/power-libperfmgr/Android.bp"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "hidl/power-libperfmgr/Android.bp.disabled"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "hidl/power/Android.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "hidl/power/Android.mk.disabled"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "hidl/powershare/Android.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "hidl/powershare/Android.mk.disabled"
+                    },
+                    {
+                        "status":  "D ",
+                        "path":  "hidl/thermal/Android.bp"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "hidl/thermal/Android.bp.disabled"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "macloader/Android.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "macloader/Android.mk.disabled"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "mkbootimg.mk"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "ril/libril/Android.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "ril/libril/Android.mk.disabled"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "ril/libsecril-client/Android.mk"
+                    },
+                    {
+                        "status":  " A",
+                        "path":  "ril/libsecril-client/Android.mk.disabled"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  18976,
+    "remotes":  [
+                    "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung (fetch)",
+                    "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung (push)"
+                ]
+}

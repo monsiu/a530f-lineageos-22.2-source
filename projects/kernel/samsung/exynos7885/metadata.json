@@ -1,0 +1,334 @@
+﻿{
+    "path":  "kernel/samsung/exynos7885",
+    "head":  "47c82a9d84ad6e3b9a857d3dba1f7115090dc788",
+    "tracked_changes":  59,
+    "untracked_files":  15,
+    "baseline_override":  "AlexFurina/Eureka-R25U-Jackpotlte",
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "arch/arm64/Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "arch/arm64/boot/dts/Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "arch/arm64/configs/exynos7885-jackpotlte_defconfig"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/Kconfig"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/android/binder_alloc.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/gpu/arm/b_r26p0/backend/gpu/mali_kbase_pm_driver.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/input/input.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/input/touchscreen/sec_ts/sec_ts.c"
+                    },
+                    {
+                        "status":  " D",
+                        "path":  "drivers/kernelsu"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "drivers/usb/gadget/configfs.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/Kconfig"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/exec.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/data.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/f2fs.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/file.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/inode.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/super.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/sysfs.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/f2fs/xattr.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/inode.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/open.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/read_write.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "fs/stat.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "include/linux/fs.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "include/uapi/linux/Kbuild"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "include/uapi/linux/fs.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/Makefile"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/Makefile.dtc"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/checks.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/data.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc-lexer.l"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc-lexer.lex.c_shipped"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc-parser.tab.c_shipped"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc-parser.tab.h_shipped"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc-parser.y"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/dtc.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/fdtdump.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/fdtget.c"
+                    },
+                    {
+                        "status":  " D",
+                        "path":  "scripts/dtc/fdtoverlay.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/fdtput.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/flattree.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/fstree.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/livetree.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/srcpos.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/srcpos.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/treesource.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/update-dtc-source.sh"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/util.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/util.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/version_gen.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "scripts/dtc/version_non_gen.h"
+                    },
+                    {
+                        "status":  " D",
+                        "path":  "scripts/dtc/yamltree.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "security/selinux/hooks.c"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "sound/soc/codecs/tfa9872/Makefile"
+                    }
+                ],
+    "untracked":  [
+                      {
+                          "path":  "fs/f2fs/verity.c",
+                          "sha256":  "d10ebf31fbbda5e646f9f8730efbafa50653900210928455bd79b92f65d5aef9",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/Kconfig",
+                          "sha256":  "1a41df4a2ab80d7f71f1cdefb7b30bf87ba2852deca94813a76b59061e9a4209",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/Makefile",
+                          "sha256":  "6b5c27ff2d82ceb1ed685a6ad3ee9204584bcf8ecfce29d99270c22171ecc2cd",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/enable.c",
+                          "sha256":  "611cb9bf551e6f078ab4dd196dce602ad281ddf7e3570d459be769c5eeab6504",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/fsverity_private.h",
+                          "sha256":  "84693016420b4833b8808c7738e6b0b80a558a9d1e973bb8d2edda7304f50e63",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/hash_algs.c",
+                          "sha256":  "066caf17ca1e95835ca59884d47375917da77c57a81b64ea540bb597e8bd6748",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/init.c",
+                          "sha256":  "a568d42c6d984d79ef182f52d9c6c7a24369cef7722357f873092d6bd41f96ff",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/measure.c",
+                          "sha256":  "4026a926612b7e33262d8be063d925d5b07bc0f4c79091b19b7326a925db518b",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/open.c",
+                          "sha256":  "16d7035e2e88d9c6798cde56163a136e52a37fde49d0bc9f7648333db5f5df89",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/signature.c",
+                          "sha256":  "5e7dcd43ab3663f17b906a32debeaa5a9df5575498fcdab305ee846f2edd1b78",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "fs/verity/verify.c",
+                          "sha256":  "9c069fe08c65ec0df5d3997781da7e9ef6c80bebac8c676a3d95dcb1dca5872c",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "include/linux/fsverity.h",
+                          "sha256":  "94862c203db1edf944f2b75645893ff09154dec69b32e1b75e2e9fccea9b554e",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "include/uapi/linux/fsverity.h",
+                          "sha256":  "8be8e57a427570f53aae2ae28d3bf2d6e9c1de02a1beaef0c330cdc3544f2d4e",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "scripts/dtc/.gitignore",
+                          "sha256":  "50c08d7e62f1a65e3be6bb253eb53e88d2d2752cd5f51ba53211a424df32d2b3",
+                          "mode":  420
+                      },
+                      {
+                          "path":  "scripts/dtc/include-prefixes/sh",
+                          "symlink":  "../../../arch/sh/boot/dts"
+                      }
+                  ],
+    "excluded_untracked":  [
+                               {
+                                   "path":  "drivers/usb/gadget/configfs.c.before-firstlink-fix",
+                                   "sha256":  "20e62a14b3503746a118b19395ab2e3c5f71f330a65059646084be9012dc7a38",
+                                   "mode":  493,
+                                   "reason":  "development scratch or disabled build file excluded from curated candidate"
+                               }
+                           ],
+    "patch_bytes":  350176,
+    "remotes":  [
+                    "origin\thttps://github.com/AlexFurina/Eureka-R25U-Jackpotlte.git (fetch)",
+                    "origin\thttps://github.com/AlexFurina/Eureka-R25U-Jackpotlte.git (push)"
+                ]
+}

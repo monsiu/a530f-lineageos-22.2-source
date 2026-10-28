@@ -1,0 +1,135 @@
+﻿{
+    "path":  "hardware/samsung_slsi-linaro/graphics",
+    "head":  "7c28107c046cd666b01adef06617482e26311ab7",
+    "tracked_changes":  29,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc1/ExynosHWC.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc1/ExynosHWCDebug.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc1/libvppdisplay/ExynosDisplay.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc1/libvppdisplay/ExynosDisplayResourceManager.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc1/libvppvirtualdisplay/ExynosVirtualDisplay.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/ExynosHWC.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/ExynosHWCDebug.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/ExynosHWCDebug.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libdevice/ExynosDevice.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libdevice/ExynosDisplay.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libdevice/ExynosLayer.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libdisplayinterface/ExynosDeviceFbInterface.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libdisplayinterface/ExynosDisplayFbInterface.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libhwchelper/ExynosHWCHelper.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libresource/ExynosMPP.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2.1/libresource/ExynosResourceManager.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/ExynosHWCDebug.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/ExynosHWCDebug.h"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/libdevice/ExynosDevice.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/libdevice/ExynosDisplay.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/libdevice/ExynosLayer.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/libhwchelper/ExynosHWCHelper.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/libresource/ExynosMPP.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libhwc2/libresource/ExynosResourceManager.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "base/libion/test/Android.bp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "exynos7580/libdisplaymodule/ExynosPrimaryDisplay.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "exynos7580/libvirtualdisplaymodule/ExynosVirtualDisplayModule.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "exynos7870/libdisplaymodule/ExynosPrimaryDisplay.cpp"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "exynos7870/libvirtualdisplaymodule/ExynosVirtualDisplayModule.cpp"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  135185,
+    "remotes":  [
+                    "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_graphics (fetch)",
+                    "exynos7885\thttps://github.com/exynos7885-dev/hardware_samsung_slsi-linaro_graphics (push)"
+                ]
+}

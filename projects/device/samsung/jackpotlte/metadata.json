@@ -1,0 +1,39 @@
+﻿{
+    "path":  "device/samsung/jackpotlte",
+    "head":  "d6885b50653457eb9ca279bd824657ba4d2ba658",
+    "tracked_changes":  5,
+    "untracked_files":  0,
+    "tracked":  [
+                    {
+                        "status":  " M",
+                        "path":  "BoardConfig.mk"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "device.mk"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "manifest.xml"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "overlay/frameworks/base/core/res/res/values/config.xml"
+                    },
+                    {
+                        "status":  " M",
+                        "path":  "proprietary-files.txt"
+                    }
+                ],
+    "untracked":  [
+
+                  ],
+    "excluded_untracked":  [
+
+                           ],
+    "patch_bytes":  4054,
+    "remotes":  [
+                    "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_jackpotlte (fetch)",
+                    "exynos7885\thttps://github.com/exynos7885-dev/device_samsung_jackpotlte (push)"
+                ]
+}
