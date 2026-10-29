@@ -1,15 +1,13 @@
-﻿A530F LineageOS 22.2 source delta candidate
+A530F LineageOS 22.2 public source index and source deltas
 
 Device: Samsung Galaxy A8 2018 SM-A530F (jackpotlte); Android 15; LineageOS 22.2.
-The authoritative baseline is manifest-pinned.xml. The kernel base is AlexFurina/Eureka-R25U-Jackpotlte at 47c82a9d84ad6e3b9a857d3dba1f7115090dc788; apply the corresponding kernel/samsung/exynos7885/changes.patch and restore the untracked source listed by metadata.json.
+The authoritative project revisions are in manifest-pinned.xml. The kernel base is AlexFurina/Eureka-R25U-Jackpotlte at 47c82a9d84ad6e3b9a857d3dba1f7115090dc788; apply projects/kernel/samsung/exynos7885/changes.patch and restore files and modes listed in that project's metadata.json.
 
-This is a source-delta archive, not a full Android checkout. Sync pinned baselines, apply each project's changes.patch at that project root, restore regular files from projects/<path>/untracked/, and restore modes/symlinks from metadata.json. The stale, unsynced local manifest fragment has been removed. Development scratch backups, temporary files, and disabled build-file copies are recorded under excluded_untracked and omitted from the source tree.
+This repository is a pinned manifest plus source deltas, not a full Android checkout. Sync the projects in the manifest. Apply each projects/<path>/changes.patch at that project's root, restore regular files from projects/<path>/untracked/, and restore modes/symlinks from metadata.json. Development scratch backups, temporary files, and disabled build-file copies are recorded under excluded_untracked and omitted.
 
-Two changed vendor projects remain excluded because their deltas include proprietary blobs. Exact vendor-source/license and build-reproducibility review is still required before treating this as a complete reproducible source release. No ROM/recovery/GApps binaries, signing keys, passphrases, logs, or private local paths are included. This is a source delta for public review; it is not a complete Android checkout and does not establish exact build reproducibility. The two changed vendor projects are omitted because their original deltas include proprietary blobs. Use the pinned upstream references and review applicable licenses before redistribution or rebuilding.
+The exact vendor project revisions used for the public-v1 build are pinned in the manifest and published on the lineage-22.2 branches:
+- vendor/samsung/exynos7885-common: https://github.com/monsiu/proprietary_vendor_samsung_exynos7885-common/tree/lineage-22.2 (commit 3f34cbafd7dae7a94d82276f0a9342eff9e7ee47)
+- vendor/samsung/jackpotlte: https://github.com/monsiu/proprietary_vendor_samsung_jackpotlte/tree/lineage-22.2 (commit 97b5ff273923219ae30d9be3f977694c617d5cc7)
+These vendor repositories include proprietary Samsung binaries used by the build. The upstream vendor repositories have no LICENSE/COPYING/NOTICE files, and no separate redistribution permission was identified during this review. This source index is not a license grant.
 
-
-
-Vendor-project scope (explicitly not included in this source delta):
-- vendor/samsung/exynos7885-common is based on exynos7885-dev/proprietary_vendor_samsung_exynos7885-common at 51a9202e8b6d5e4852fdfbb31e5cd1e6769599af. Local changes also touch Android.bp and exynos7885-common-vendor.mk; the changed libwvhidl.so and four untracked proprietary .so files are omitted.
-- vendor/samsung/jackpotlte is based on exynos7885-dev/proprietary_vendor_samsung_jackpotlte at 77589ad4d41bcd0c6b25c7347c36700531d91942. Local changes also touch Android.bp, jackpotlte-vendor.mk, mixer_gains.xml, and mixer_paths.xml; the changed audio.primary.exynos7885.so and an untracked .so.orig copy are omitted.
-- The exact base repositories are public, but their trees contain no LICENSE/COPYING/NOTICE file. The local source-only patches are withheld pending provenance/license review. These baseline links do not represent the exact modified vendor build inputs.
+The source inputs are now publicly pinned, including vendor repositories, but a clean rebuild from this manifest and delta set has not been independently verified. No ROM/recovery/GApps images, signing keys, passphrases, private logs, or personal paths are included.

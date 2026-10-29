@@ -12,6 +12,7 @@
   <remote name="aosp-shusky" fetch="https://android.googlesource.com" review="android-review.googlesource.com" revision="refs/tags/android-15.0.0_r34" />
   <remote name="aosp-tangorpro" fetch="https://android.googlesource.com" review="android-review.googlesource.com" revision="refs/tags/android-15.0.0_r32" />
   <remote name="exynos7885" fetch="https://github.com/exynos7885-dev/" />
+  <remote name="monsiu" fetch="https://github.com/monsiu/" />
   <remote name="github" fetch=".." review="review.lineageos.org" />
   <remote name="private" fetch="ssh://git@github.com" />
   
@@ -1186,8 +1187,8 @@
   <project name="platform/tools/tradefederation/prebuilts" path="tools/tradefederation/prebuilts" remote="aosp" groups="pdk,tradefed" clone-depth="1" revision="f22bceb7858d01dbed2e6d6a5295ffd20826f11b" />
   <project name="platform/tools/treble" path="tools/treble" remote="aosp" groups="pdk,tools" revision="105f628577ac4ba0e277a494fbb614ed8c12a994" />
   <project name="platform/tools/trebuchet" path="tools/trebuchet" remote="aosp" groups="cts,pdk,pdk-cw-fs,pdk-fs,tools" revision="56b170dbe6574b1f0ec9db7a63de7238ca6a09ea" />
-  <project name="proprietary_vendor_samsung_exynos7885-common" path="vendor/samsung/exynos7885-common" remote="exynos7885" revision="51a9202e8b6d5e4852fdfbb31e5cd1e6769599af" groups="local::a530f" />
-  <project name="proprietary_vendor_samsung_jackpotlte" path="vendor/samsung/jackpotlte" remote="exynos7885" revision="77589ad4d41bcd0c6b25c7347c36700531d91942" groups="local::a530f" />
+  <project name="proprietary_vendor_samsung_exynos7885-common" path="vendor/samsung/exynos7885-common" remote="monsiu" revision="3f34cbafd7dae7a94d82276f0a9342eff9e7ee47" groups="local::a530f" />
+  <project name="proprietary_vendor_samsung_jackpotlte" path="vendor/samsung/jackpotlte" remote="monsiu" revision="97b5ff273923219ae30d9be3f977694c617d5cc7" groups="local::a530f" />
   <project name="toolchain/pgo-profiles" remote="aosp" groups="pdk" clone-depth="1" revision="9cb1bd80a1c19d9e545b00c0767d354ba81e1676" />
   <project name="tools/platform-compat" remote="aosp" groups="pdk,pdk-cw-fs,pdk-fs" revision="b7bfe76a3376ed14ad4000514e7f5aa4f0ee949d" />
   <project name="trusty/app/authmgr" path="trusty/user/app/authmgr" remote="aosp" groups="pdk,trusty" revision="dc3ac58f7053700c0cdf99b10a8b033b608fca50" />

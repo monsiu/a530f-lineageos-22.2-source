@@ -1,4 +1,4 @@
-﻿{
+{
     "projects":  [
                      {
                          "path":  "bootable/recovery",
@@ -68,8 +68,19 @@
                  ],
     "source_backup_checks_passed":  true,
     "excluded_vendor_projects":  [
-                                     "vendor/samsung/exynos7885-common",
-                                     "vendor/samsung/jackpotlte"
+
                                  ],
-    "excluded_reason":  "Original backup contains proprietary shared libraries and changes beneath proprietary/vendor; not copied."
+    "excluded_reason":  "none; exact vendor repositories are pinned in manifest-pinned.xml",
+    "vendor_repositories_published":  [
+                                          {
+                                              "path":  "vendor/samsung/exynos7885-common",
+                                              "commit":  "3f34cbafd7dae7a94d82276f0a9342eff9e7ee47",
+                                              "repository":  "https://github.com/monsiu/proprietary_vendor_samsung_exynos7885-common"
+                                          },
+                                          {
+                                              "path":  "vendor/samsung/jackpotlte",
+                                              "commit":  "97b5ff273923219ae30d9be3f977694c617d5cc7",
+                                              "repository":  "https://github.com/monsiu/proprietary_vendor_samsung_jackpotlte"
+                                          }
+                                      ]
 }

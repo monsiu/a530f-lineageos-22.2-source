@@ -1,14 +1,26 @@
-﻿{
+{
     "device":  "Samsung Galaxy A8 2018 SM-A530F (jackpotlte)",
     "android":  "15",
     "lineageos":  "22.2",
     "source_projects_included":  13,
     "tracked_changed_projects":  188,
     "untracked_files_included":  19,
-    "source_type":  "pinned upstream manifest plus source deltas",
-    "status":  "published source delta; incomplete checkout, reproducibility review pending",
-    "vendor_projects_excluded":  2,
+    "source_type":  "pinned repo manifest plus 13 source deltas and 2 exact vendor repositories",
+    "status":  "published source inputs; clean rebuild not independently verified",
+    "vendor_projects_excluded":  0,
     "private_keys_logs_and_rom_binaries_included":  false,
     "kernel_source":  "AlexFurina/Eureka-R25U-Jackpotlte",
-    "kernel_commit":  "47c82a9d84ad6e3b9a857d3dba1f7115090dc788"
+    "kernel_commit":  "47c82a9d84ad6e3b9a857d3dba1f7115090dc788",
+    "vendor_projects_included":  2,
+    "proprietary_vendor_binaries_included_in_vendor_repos":  true,
+    "vendor_project_commits":  [
+                                   {
+                                       "path":  "vendor/samsung/exynos7885-common",
+                                       "commit":  "3f34cbafd7dae7a94d82276f0a9342eff9e7ee47"
+                                   },
+                                   {
+                                       "path":  "vendor/samsung/jackpotlte",
+                                       "commit":  "97b5ff273923219ae30d9be3f977694c617d5cc7"
+                                   }
+                               ]
 }
